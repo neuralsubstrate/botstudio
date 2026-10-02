@@ -1,4 +1,32 @@
+/* Honest hero — dark portrait, glass panels, white type. */
 
+.hero {
+  /* Height-aware unit so the stage fits under the nav at short viewports
+     (e.g. 1280×800 window with browser chrome). */
+  --hu: min(
+    var(--u),
+    calc((100svh - var(--nav-h) - 8px) / 780)
+  );
+  --hero-ink: var(--ink);
+  --hero-ink-dim: var(--ink-dim);
+  --hero-rule: var(--rule);
+  --hero-scrim: rgba(0, 0, 0, 0.36);
+  --hero-tick-line: rgba(255, 255, 255, 0.7);
+  --hero-media-bg: #0b0d10;
+
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Content clears the fixed nav; only .media bleeds under it. */
+  min-height: calc(100svh - var(--nav-h));
+  padding-block: calc(4 * var(--hu));
+  overflow: hidden;
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg-deep);
+  color: var(--hero-ink);
+}
 
 .media {
   position: absolute;
