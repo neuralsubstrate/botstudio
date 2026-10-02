@@ -1,0 +1,217 @@
+/* The section is the scroll track: its extra height is how far the visitor
+   scrolls to play the scene through, plus a pause of 80vh at the end that
+   holds the finished page (scene.js, HOLD). The pinned stage stays on
+   screen while they do. Its colour is the scene's own fog colour (#161719), so distant grid lines
+   fade into the page rather than ending. */
+.section {
+  position: relative;
+  height: 400vh;
+  background: #161719;
+  color: #d0d6e0;
+}
+
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+}
+
+/* The canvas fills the whole pinned screen: no frame, no edge. */
+.stage,
+.flash,
+.still {
+  position: absolute;
+  inset: 0;
+}
+
+.stage canvas {
+  display: block;
+}
+
+.flash {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.still {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* The real "Let's chat" button, laid exactly over the 3D one once the page
+   has locked together (the scene reports its rect). Its size drives the type,
+   so it matches the 3D face at any screen size. */
+.cta {
+  position: absolute;
+  z-index: 2;
+  container-type: size;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: #ffffff;
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.3s ease,
+    visibility 0s linear 0.3s;
+}
+
+.cta[data-show] {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transition: opacity 0.3s ease;
+}
+
+/* The face: the accent with a darker lip below, so it reads as a raised key. */
+.ctaFace {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35em;
+  border-radius: inherit;
+  background: linear-gradient(#1a88f0, #0077e6 55%, #006ad0);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 3px 0 #0058b0,
+    0 14px 28px -10px rgba(0, 119, 230, 0.75);
+  font: 600 38cqh / 1 var(--display);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  transition:
+    transform 0.2s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.2s ease;
+}
+
+.cta:hover .ctaFace {
+  transform: translateY(-2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.35),
+    0 5px 0 #0058b0,
+    0 20px 34px -10px rgba(0, 119, 230, 0.85);
+}
+
+.cta:active .ctaFace {
+  transform: translateY(2px);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.25),
+    0 1px 0 #0058b0,
+    0 8px 16px -8px rgba(0, 119, 230, 0.7);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+.ctaArrow {
+  width: 1.05em;
+  height: 1.05em;
+}
+
+/* Locator: two rings close in on the button as it appears, like the
+   Windows pointer finder, then a soft glow breathes now and then. */
+.cta::before,
+.cta::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border: 2px solid var(--accent);
+  border-radius: inherit;
+  opacity: 0;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cta[data-show]::before {
+    animation: locate 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) 0.1s 2;
+  }
+
+  .cta[data-show]::after {
+    animation: locate 0.8s cubic-bezier(0.2, 0.7, 0.3, 1) 0.3s 2;
+  }
+
+  .cta[data-show] .ctaFace {
+    animation: breathe 3.2s ease-in-out 1.9s infinite;
+  }
+}
+
+@keyframes locate {
+  0% {
+    opacity: 0;
+    transform: scale(2.6, 3.6);
+  }
+  30% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 0 rgba(0, 119, 230, 0));
+  }
+  50% {
+    filter: drop-shadow(0 0 14px rgba(0, 119, 230, 0.55));
+  }
+}
+
+/* Lined up with the nav and hero's 1280u stage. */
+.labelRow {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--nav-h) + 24 * var(--u));
+  left: 0;
+  right: 0;
+  width: calc(1280 * var(--u));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 calc(20 * var(--u));
+  pointer-events: none;
+}
+
+.label {
+  font: 400 calc(12 * var(--u)) / 1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* On phones a shorter track keeps the scroll from feeling endless. */
+@media (max-width: 899px) {
+  .section {
+    height: 320vh;
+  }
+
+  .labelRow {
+    padding: 0 16px;
+  }
+
+  .label {
+    font-size: 11px;
+  }
+}
