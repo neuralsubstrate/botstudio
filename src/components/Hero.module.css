@@ -31,14 +31,16 @@
 }
 
 .hero[data-hero-theme="light"] {
+  /* Genuine light palette — solid light surface, no wash over dark media. */
   --hero-ink: #141414;
   --hero-ink-dim: #5c6063;
-  --hero-rule: rgba(20, 20, 20, 0.14);
-  --hero-scrim: rgba(255, 255, 255, 0.78);
-  --hero-tick-line: rgba(20, 20, 20, 0.35);
-  --hero-media-bg: #e8eaee;
+  --hero-rule: rgba(20, 20, 20, 0.16);
+  --hero-scrim: #ffffff;
+  --hero-tick-line: rgba(20, 20, 20, 0.4);
+  --hero-media-bg: #f6f7f9;
   background: #f6f7f9;
   color: #141414;
+  border-bottom-color: rgba(20, 20, 20, 0.12);
 }
 
 .media {
@@ -64,8 +66,11 @@
   opacity: 1;
 }
 
+/* Hide dark portrait entirely — light mode is a clean light field. */
+.hero[data-hero-theme="light"] .image,
 .hero[data-hero-theme="light"] .imageActive {
-  opacity: 0.22;
+  opacity: 0;
+  visibility: hidden;
 }
 
 .imageBreathe {
@@ -108,12 +113,8 @@
 }
 
 .hero[data-hero-theme="light"] .vignette {
-  background: linear-gradient(
-    180deg,
-    rgba(246, 247, 249, 0.55) 0%,
-    rgba(246, 247, 249, 0.82) 55%,
-    rgba(246, 247, 249, 0.94) 100%
-  );
+  /* Solid light field — not a translucent sheet over the photo. */
+  background: #f6f7f9;
 }
 
 /* Fine particle/dot grid — kept from botstudio */
@@ -135,10 +136,10 @@
 }
 
 .hero[data-hero-theme="light"] .dotGrid {
-  opacity: 0.18;
+  opacity: 0.35;
   background-image: radial-gradient(
     circle,
-    #9aa0a8 0.5px,
+    #c5c9d0 0.5px,
     transparent 0.55px
   );
 }
@@ -181,6 +182,13 @@
 .themeToggle:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.hero[data-hero-theme="light"] .themeToggle {
+  background: #ffffff;
+  border-color: rgba(20, 20, 20, 0.18);
+  color: #141414;
+  box-shadow: 0 4px 14px -8px rgba(20, 20, 20, 0.2);
 }
 
 .themeIcon {
@@ -238,6 +246,13 @@
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-radius: 14px;
+}
+
+.hero[data-hero-theme="light"] .scrim {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  border: 1px solid rgba(20, 20, 20, 0.1);
+  box-shadow: 0 10px 28px -16px rgba(20, 20, 20, 0.18);
 }
 
 .headline {
@@ -428,6 +443,11 @@
   background: #0a0a0b;
 }
 
+.hero[data-hero-theme="light"] .reelVideo {
+  border: 1px solid rgba(20, 20, 20, 0.12);
+  box-shadow: 0 12px 28px -18px rgba(20, 20, 20, 0.25);
+}
+
 .reelVideo video {
   display: block;
   width: 100%;
@@ -474,11 +494,7 @@
   }
 
   .hero[data-hero-theme="light"] .vignette {
-    background: linear-gradient(
-      rgba(246, 247, 249, 0.4),
-      rgba(246, 247, 249, 0.85) 70%,
-      rgba(246, 247, 249, 0.96)
-    );
+    background: #f6f7f9;
   }
 
   .stage {
