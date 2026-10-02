@@ -56,6 +56,8 @@ export function Hero() {
           />
         ))}
         <div className={styles.scrim} />
+        {/* Fine particle/dot grid — matches Framer Create® hero Dots layer */}
+        <div className={styles.dotGrid} aria-hidden="true" />
       </div>
 
       <div className={`shell ${styles.inner}`}>

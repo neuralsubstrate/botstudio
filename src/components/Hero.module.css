@@ -62,6 +62,25 @@
     );
 }
 
+/* Fine particle/dot grid overlay — matches Framer hero "Dots" layer:
+   SVG 8×8 circle (#3D3D3D) tiled at background-size 4px, opacity 0.25.
+   Above images + scrim, below .inner so copy stays crisp. Static (reduced-motion OK). */
+.dotGrid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.25;
+  background-image: radial-gradient(
+    circle,
+    #3d3d3d 0.5px,
+    transparent 0.55px
+  );
+  background-size: 4px 4px;
+  background-position: center;
+  background-repeat: repeat;
+}
+
 .inner {
   position: relative;
   z-index: 1;
