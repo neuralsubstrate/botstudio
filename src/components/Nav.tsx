@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import { CAPABILITIES, SITE } from "@/lib/content";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { NavMenu } from "./NavMenu";
 import { StudiosMark } from "./StudiosLogo";
 import styles from "./Nav.module.css";
@@ -93,6 +94,7 @@ export function Nav() {
           </nav>
 
           <div className={styles.actions}>
+            <ThemeToggle />
             <a
               className={`btn btn-primary ${styles.cta}`}
               href={`mailto:${SITE.email}`}

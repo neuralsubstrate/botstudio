@@ -28,6 +28,19 @@
   color-scheme: dark;
 }
 
+
+html[data-theme="light"] {
+  --bg: #f6f7f9;
+  --bg-deep: #ffffff;
+  --ink: #141414;
+  --ink-dim: #5c6063;
+  --ink-muted: #797d82;
+  --mist: #3a3d42;
+  --rule: rgba(20, 20, 20, 0.12);
+  --rule-strong: rgba(20, 20, 20, 0.28);
+  color-scheme: light;
+}
+
 @media (max-width: 900px) {
   :root {
     --u: calc(100vw / 1280 * 1.05);

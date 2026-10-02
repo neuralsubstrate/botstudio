@@ -31,6 +31,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${figtree.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");if(t==="light")document.documentElement.dataset.theme="light";}catch(e){}})();`,
+          }}
+        />
         <SmoothScroll />
         <Nav />
         <main>{children}</main>
