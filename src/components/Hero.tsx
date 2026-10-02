@@ -5,11 +5,7 @@ import { useEffect, useState } from "react";
 import { SheridanClock } from "./SheridanClock";
 import styles from "./Hero.module.css";
 
-/** Theme portraits — native 2560×1440, not upscaled. */
-const PORTRAITS = {
-  dark: "/hero/portrait-dark.webp",
-  light: "/hero/portrait-light.webp",
-} as const;
+const PORTRAIT = "/hero/portrait-dark.webp";
 
 const TICKS = [
   { label: "// 00.01°", y: 90 },
@@ -21,20 +17,16 @@ const TICKS = [
 const HEADLINE =
   "Digital experiences that connect, scale and perform".split(" ");
 
-type HeroTheme = "dark" | "light";
-
 /**
  * Honest hero aligned to botlane.tech / bot-studio:
  * full-bleed media (bleeds under nav only; stage/CTAs clear of --nav-h),
  * soft scrims on headline + lockup, side ticks, mono message lines,
  * Sheridan time, craft/chat CTAs, showreel plate on the right.
- * Theme swaps the portrait (black vs white). Particle dots and breathe stay.
- * Hero-only light/dark treatment (in-session; does not theme the rest of the site).
+ * Dark portrait only. Particle dots and breathe stay.
  */
 export function Hero() {
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
-  const [heroTheme, setHeroTheme] = useState<HeroTheme>("dark");
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -44,13 +36,6 @@ export function Hero() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  useEffect(() => {
-    document.documentElement.dataset.heroTheme = heroTheme;
-    return () => {
-      delete document.documentElement.dataset.heroTheme;
-    };
-  }, [heroTheme]);
-
   const heroClass = [
     styles.hero,
     paused || reduceMotion ? styles.paused : "",
@@ -58,57 +43,29 @@ export function Hero() {
     .filter(Boolean)
     .join(" ");
 
-  const nextTheme: HeroTheme = heroTheme === "dark" ? "light" : "dark";
-
   return (
     <section
       className={heroClass}
-      data-hero-theme={heroTheme}
       aria-label="Botlane Studios"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
       <div className={styles.media} aria-hidden="true">
-        {(Object.keys(PORTRAITS) as HeroTheme[]).map((theme) => (
-          <Image
-            key={theme}
-            src={PORTRAITS[theme]}
-            alt=""
-            fill
-            priority={theme === "dark"}
-            loading={theme === "dark" ? "eager" : "lazy"}
-            sizes="100vw"
-            className={[
-              styles.image,
-              theme === "dark" ? styles.imageDark : styles.imageLight,
-              !reduceMotion ? styles.imageBreathe : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          />
-        ))}
+        <Image
+          src={PORTRAIT}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className={[styles.image, !reduceMotion ? styles.imageBreathe : ""]
+            .filter(Boolean)
+            .join(" ")}
+        />
         <div className={styles.vignette} />
         <div className={styles.dotGrid} />
       </div>
 
       <div className={styles.stage}>
-        <button
-          type="button"
-          className={styles.themeToggle}
-          onClick={() => setHeroTheme(nextTheme)}
-          aria-pressed={heroTheme === "light"}
-          aria-label={
-            nextTheme === "light"
-              ? "Switch hero to light treatment"
-              : "Switch hero to dark treatment"
-          }
-        >
-          <span className={styles.themeIcon} aria-hidden="true">
-            {nextTheme === "light" ? "☀" : "☾"}
-          </span>
-          <span className={styles.themeLabel}>{nextTheme}</span>
-        </button>
-
         {TICKS.map((tick) => (
           <div
             key={tick.label}
@@ -138,7 +95,7 @@ export function Hero() {
           <span>\Studios</span>
         </h1>
 
-        <div className={`${styles.message} ${styles.scrim}`}>
+        <div className={styles.message}>
           <p>Small studio, worldwide tech.</p>
           <p>We create stories people remember.</p>
         </div>

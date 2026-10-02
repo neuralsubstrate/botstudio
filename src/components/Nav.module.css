@@ -32,35 +32,6 @@
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
-/* Follow the in-session hero toggle. Light: transparent over the white
-   portrait, near-black type; solid white bar after scroll. Dark nav unchanged. */
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) {
-  color: #141414;
-}
-
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .logoText,
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .link,
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .toggle {
-  color: #141414;
-}
-
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .link:hover,
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .link:focus-visible,
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .link[aria-expanded="true"] {
-  color: #0a0a0a;
-}
-
-:global(html[data-hero-theme="light"]) .nav:not([data-open="true"]) .hoverPill {
-  background: rgba(20, 20, 20, 0.06);
-}
-
-:global(html[data-hero-theme="light"]) .nav[data-scrolled="true"]:not([data-open="true"]) {
-  background: #ffffff;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  border-bottom-color: rgba(20, 20, 20, 0.1);
-}
-
 .inner {
   height: 100%;
   display: flex;
@@ -511,9 +482,9 @@
   flex: none;
 }
 
-.actions .cta {
-  /* Shorter than the global .btn (16px 20px). Horizontal padding unchanged. */
-  padding: 6px 20px;
+.cta {
+  /* botsign .nav-cta @ ≥861px + .btn-primary radius */
+  padding: 9px 17px;
   font-size: 13.5px;
   border-radius: 8px;
 }

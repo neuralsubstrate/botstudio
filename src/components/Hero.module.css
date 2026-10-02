@@ -1,50 +1,4 @@
-/* Honest hero — structure/copy from botlane.tech (bot-studio), with
-   botstudio rotating backgrounds, particle dots, and Ken Burns breathe.
-   Hero-only light/dark treatment via [data-hero-theme]; rest of site unchanged. */
 
-.hero {
-  /* Height-aware unit so the stage fits under the nav at short viewports
-     (e.g. 1280×800 window with browser chrome). */
-  --hu: min(
-    var(--u),
-    calc((100svh - var(--nav-h) - 8px) / 780)
-  );
-  --hero-ink: var(--ink);
-  --hero-ink-dim: var(--ink-dim);
-  --hero-rule: var(--rule);
-  --hero-scrim: rgba(0, 0, 0, 0.36);
-  --hero-tick-line: rgba(255, 255, 255, 0.7);
-  --hero-media-bg: #0b0d10;
-
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  /* Content clears the fixed nav; only .media bleeds under it. */
-  min-height: calc(100svh - var(--nav-h));
-  padding-block: calc(4 * var(--hu));
-  /* Visible so the portrait can show through the transparent nav.
-     The scaled photo stays clipped by .media. */
-  overflow: visible;
-  border-bottom: 1px solid var(--rule);
-  background: var(--bg-deep);
-  color: var(--hero-ink);
-}
-
-.hero[data-hero-theme="light"] {
-  /* Surrounding type sits on the white portrait, so it goes dark.
-     Panel copy is forced back to white on tinted glass below. */
-  --hero-ink: #141414;
-  --hero-ink-dim: #3e4348;
-  --hero-rule: rgba(20, 20, 20, 0.28);
-  --hero-scrim: rgba(16, 20, 28, 0.42);
-  --hero-tick-line: rgba(20, 20, 20, 0.45);
-  --hero-media-bg: #f4f5f7;
-  background: #f6f7f9;
-  color: #141414;
-  border-bottom-color: rgba(20, 20, 20, 0.12);
-}
 
 .media {
   position: absolute;
@@ -59,18 +13,10 @@
 .image {
   object-fit: cover;
   object-position: center 42%;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.45s ease;
+  opacity: 1;
+  transition: opacity 1.2s ease-in-out;
   transform-origin: center center;
   will-change: opacity, transform;
-}
-
-/* One portrait per treatment — the other stays hidden, not washed out. */
-.hero[data-hero-theme="dark"] .imageDark,
-.hero[data-hero-theme="light"] .imageLight {
-  opacity: 1;
-  visibility: visible;
 }
 
 .imageBreathe {
@@ -112,37 +58,22 @@
   transition: background 0.35s ease;
 }
 
-.hero[data-hero-theme="light"] .vignette {
-  /* Let the white portrait show. No flat wash over the photo. */
-  background: transparent;
-}
-
 /* Fine particle/dot grid — kept from botstudio */
 .dotGrid {
   position: absolute;
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  /* Light dots so the same grain reads on the black portrait. */
-  opacity: 0.65;
+  opacity: 0.25;
   background-image: radial-gradient(
     circle,
-    #d5d8de 0.5px,
+    #3d3d3d 0.5px,
     transparent 0.55px
   );
   background-size: 4px 4px;
   background-position: center;
   background-repeat: repeat;
   transition: opacity 0.35s ease;
-}
-
-.hero[data-hero-theme="light"] .dotGrid {
-  opacity: 0.12;
-  background-image: radial-gradient(
-    circle,
-    #b7bcc4 0.5px,
-    transparent 0.55px
-  );
 }
 
 /* Artboard stage — scaled with --hu so CTAs + reel stay inside short viewports */
@@ -152,55 +83,6 @@
   width: calc(1280 * var(--hu));
   height: calc(780 * var(--hu));
   margin: 0 auto;
-}
-
-.themeToggle {
-  position: absolute;
-  right: calc(20 * var(--hu));
-  top: calc(16 * var(--hu));
-  z-index: 2;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: calc(36 * var(--hu));
-  padding: 0 calc(12 * var(--hu));
-  border-radius: 8px;
-  border: 1px solid var(--hero-rule);
-  background: var(--hero-scrim);
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-  color: var(--hero-ink);
-  cursor: pointer;
-  font: 400 calc(12 * var(--hu)) / 1 var(--mono);
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease,
-    background 0.2s ease;
-}
-
-.themeToggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.hero[data-hero-theme="light"] .themeToggle {
-  background: rgba(16, 20, 28, 0.42);
-  border-color: rgba(255, 255, 255, 0.42);
-  color: #ffffff;
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(12px);
-  backdrop-filter: blur(12px);
-}
-
-.themeIcon {
-  font-size: 1.05em;
-  line-height: 1;
-}
-
-.themeLabel {
-  text-transform: uppercase;
 }
 
 .tick,
@@ -249,16 +131,6 @@
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-radius: 14px;
-}
-
-/* Light portrait: same glass language, darker tint so white type still reads. */
-.hero[data-hero-theme="light"] .scrim {
-  background: rgba(16, 20, 28, 0.46);
-  border: 1px solid rgba(255, 255, 255, 0.38);
-  box-shadow: none;
-  -webkit-backdrop-filter: blur(18px) saturate(1.15);
-  backdrop-filter: blur(18px) saturate(1.15);
-  color: #ffffff;
 }
 
 .headline {
@@ -315,11 +187,6 @@
     0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
-.hero[data-hero-theme="light"] .headline,
-.hero[data-hero-theme="light"] .lockup {
-  color: #ffffff;
-}
-
 .accent {
   color: var(--accent);
 }
@@ -327,14 +194,12 @@
 .message {
   left: calc(150 * var(--hu));
   top: calc(475 * var(--hu));
-  width: fit-content;
-  max-width: calc(460 * var(--hu));
+  width: calc(410 * var(--hu));
   display: grid;
-  gap: calc(8 * var(--hu));
-  padding: calc(8 * var(--hu)) calc(16 * var(--hu));
+  gap: calc(10 * var(--hu));
   font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
   text-transform: uppercase;
-  color: #ffffff;
+  color: var(--hero-ink);
 }
 
 .message p {
@@ -343,7 +208,7 @@
 
 .time {
   left: calc(150 * var(--hu));
-  top: calc(562 * var(--hu));
+  top: calc(555 * var(--hu));
   font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
   text-transform: uppercase;
   color: var(--hero-ink);
@@ -405,11 +270,9 @@
   color: #0a0a0a;
 }
 
-
 .btnLight .btnArrow {
   color: var(--accent);
 }
-
 
 .reel {
   left: calc(874 * var(--hu));
@@ -444,11 +307,6 @@
   overflow: hidden;
   border-radius: 8px;
   background: #0a0a0b;
-}
-
-.hero[data-hero-theme="light"] .reelVideo {
-  border: 1px solid rgba(20, 20, 20, 0.12);
-  box-shadow: 0 12px 28px -18px rgba(20, 20, 20, 0.25);
 }
 
 .reelVideo video {
@@ -496,26 +354,12 @@
     );
   }
 
-  .hero[data-hero-theme="light"] .vignette {
-    background: transparent;
-  }
-
   .stage {
     width: auto;
     height: auto;
     display: grid;
     gap: 18px;
     padding: 28px 20px 40px;
-  }
-
-  .themeToggle {
-    position: relative;
-    right: auto;
-    top: auto;
-    justify-self: end;
-    height: 36px;
-    padding: 0 12px;
-    font-size: 12px;
   }
 
   .tick {
@@ -606,7 +450,6 @@
     margin-top: auto;
     grid-template-columns: 1fr minmax(0, 400px);
     grid-template-areas:
-      "toggle toggle"
       "headline headline"
       "lockup lockup"
       "message reel"
@@ -615,10 +458,6 @@
       "ctas reel";
     gap: 22px 48px;
     padding: 0 48px 56px;
-  }
-
-  .themeToggle {
-    grid-area: toggle;
   }
 
   .headline {
