@@ -3,13 +3,23 @@
 import { useEffect, useState } from "react";
 import styles from "./ThemeToggle.module.css";
 
-const KEY = "botstudio-theme";
+const COOKIE = "botstudio-theme";
+const MAX_AGE = 60 * 60 * 24 * 365;
+
+function readCookie(): "light" | "dark" | null {
+  const m = document.cookie.match(/(?:^|; )botstudio-theme=(light|dark)/);
+  return m ? (m[1] as "light" | "dark") : null;
+}
+
+function writeCookie(theme: "light" | "dark") {
+  document.cookie = `${COOKIE}=${theme}; Path=/; Max-Age=${MAX_AGE}; SameSite=Lax`;
+}
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<"dark" | "light">("light");
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(KEY);
+    const stored = readCookie();
     const next = stored === "dark" ? "dark" : "light";
     document.documentElement.dataset.theme = next;
     setTheme(next);
@@ -18,7 +28,7 @@ export function ThemeToggle() {
   const toggle = () => {
     const next = theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
-    window.localStorage.setItem(KEY, next);
+    writeCookie(next);
     setTheme(next);
   };
 

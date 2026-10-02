@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");if(t==="dark")document.documentElement.dataset.theme="dark";else document.documentElement.dataset.theme="light";}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");var m=document.cookie.match(/(?:^|; )botstudio-theme=(light|dark)/);document.documentElement.dataset.theme=(m&&m[1]==="dark")?"dark":"light";}catch(e){}})();`,
           }}
         />
         <SmoothScroll />
