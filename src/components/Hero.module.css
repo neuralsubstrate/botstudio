@@ -1,11 +1,15 @@
+/* Honest hero — structure/copy from botlane.tech (bot-studio), with
+   botstudio rotating backgrounds, particle dots, and Ken Burns breathe. */
+
 .hero {
   position: relative;
   isolation: isolate;
-  /* Full viewport under fixed nav (60px / --nav-h) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: 100svh;
   margin-top: calc(-1 * var(--nav-h));
-  display: flex;
-  align-items: stretch;
+  padding-block: calc(14 * var(--u));
   overflow: hidden;
   border-bottom: 1px solid var(--rule);
   background: var(--bg-deep);
@@ -17,11 +21,12 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
+  background: #0b0d10;
 }
 
 .image {
   object-fit: cover;
-  object-position: center center;
+  object-position: center 42%;
   opacity: 0;
   transition: opacity 1.2s ease-in-out;
   transform-origin: center center;
@@ -32,7 +37,6 @@
   opacity: 1;
 }
 
-/* Soft Ken Burns “breathing” — both layers so crossfade + pan/zoom stay in sync */
 .imageBreathe {
   animation: heroBreathe 16s ease-in-out infinite alternate;
 }
@@ -60,35 +64,18 @@
   }
 }
 
-/* Soft dark scrim: readable light type without crushing the portrait */
-.scrim {
+/* Soft vignette — readable type without crushing the portrait */
+.vignette {
   position: absolute;
   inset: 0;
-  background:
-    linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.72) 0%,
-      rgba(0, 0, 0, 0.42) 34%,
-      rgba(0, 0, 0, 0.2) 55%,
-      rgba(0, 0, 0, 0.4) 100%
-    ),
-    linear-gradient(
-      180deg,
-      rgba(0, 0, 0, 0.48) 0%,
-      rgba(0, 0, 0, 0.12) 28%,
-      rgba(0, 0, 0, 0.18) 70%,
-      rgba(0, 0, 0, 0.68) 100%
-    ),
-    radial-gradient(
-      ellipse 70% 55% at 18% 45%,
-      rgba(0, 0, 0, 0.28),
-      transparent 70%
-    );
+  background: radial-gradient(
+    120% 90% at 50% 45%,
+    rgba(0, 0, 0, 0.1),
+    rgba(0, 0, 0, 0.45)
+  );
 }
 
-/* Fine particle/dot grid overlay — matches Framer hero "Dots" layer:
-   SVG 8×8 circle (#3D3D3D) tiled at background-size 4px, opacity 0.25.
-   Above images + scrim, below .inner so copy stays crisp. Static (reduced-motion OK). */
+/* Fine particle/dot grid — kept from botstudio */
 .dotGrid {
   position: absolute;
   inset: 0;
@@ -105,230 +92,442 @@
   background-repeat: repeat;
 }
 
-.inner {
+/* Artboard stage (1280 × 820 at --u), matching live botlane.tech */
+.stage {
   position: relative;
   z-index: 1;
-  width: 100%;
-  display: flex;
-  align-items: stretch;
-  gap: calc(28 * var(--u));
-  padding-top: calc(var(--nav-h) + 56 * var(--u));
-  padding-bottom: calc(56 * var(--u));
-  min-height: 100svh;
+  width: calc(1280 * var(--u));
+  height: calc(820 * var(--u));
+  margin: 0 auto;
 }
 
-/* Left mono coords rail — Framer // 00.0x° pattern */
-.rail {
+.tick,
+.headline,
+.tagline,
+.lockup,
+.message,
+.time,
+.ctas,
+.reel {
+  position: absolute;
+}
+
+/* Side ticks — live // 00.0x° marks */
+.tick {
+  left: calc(20 * var(--u));
+  top: calc(var(--y) * var(--u));
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: calc(28 * var(--u));
-  flex: none;
-  padding-block: calc(24 * var(--u));
-  font-size: calc(12 * var(--u));
-  color: var(--ink-muted);
+  align-items: center;
+  font: 400 calc(9 * var(--u)) / 1 var(--mono);
+  color: var(--ink-dim);
+  letter-spacing: 0.04em;
   user-select: none;
 }
 
-.rail span {
-  position: relative;
-  padding-left: 14px;
+.tickMark {
+  width: calc(8 * var(--u));
+  height: calc(3 * var(--u));
+  background: var(--ink);
 }
 
-.rail span::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 50%;
-  width: 8px;
+.tickLine {
+  width: calc(26 * var(--u));
   height: 1px;
-  background: var(--ink-muted);
-  opacity: 0.7;
+  margin-right: calc(12 * var(--u));
+  background: rgba(255, 255, 255, 0.7);
 }
 
-.copy {
-  flex: 1;
-  max-width: min(36rem, 100%);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: calc(14 * var(--u));
-  min-width: 0;
+.tickLabel {
+  white-space: nowrap;
 }
 
-/* Frosted glass panels — Framer hero pattern */
-.glass {
-  background: rgba(18, 20, 24, 0.42);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.06),
-    0 8px 32px rgba(0, 0, 0, 0.28);
-  backdrop-filter: blur(18px) saturate(1.15);
-  -webkit-backdrop-filter: blur(18px) saturate(1.15);
-}
-
-.glassHeadline {
-  align-self: flex-start;
-  max-width: 100%;
-  padding: calc(18 * var(--u)) calc(22 * var(--u));
+/* Soft live-style scrim — not Framer bordered glass cards */
+.scrim {
+  background: rgba(0, 0, 0, 0.36);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
   border-radius: 14px;
 }
 
-.glassBrand {
-  align-self: stretch;
+.headline {
+  left: calc(229 * var(--u));
+  top: calc(151 * var(--u));
+  width: calc(592 * var(--u));
   margin: 0;
-  padding: calc(14 * var(--u)) calc(22 * var(--u));
-  border-radius: 12px;
-  font-family: var(--display);
-  font-size: clamp(1.35rem, calc(28 * var(--u)), 1.85rem);
-  font-weight: 600;
-  letter-spacing: -0.04em;
-  line-height: 1.1;
-}
-
-.brandAccent {
-  color: var(--accent);
-}
-
-.brandRest {
-  color: var(--ink);
-}
-
-.glassBody {
-  align-self: flex-start;
-  max-width: min(28rem, 100%);
-  padding: calc(20 * var(--u)) calc(22 * var(--u));
-  border-radius: 14px;
-}
-
-.eyebrow {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: calc(14 * var(--u));
-  letter-spacing: -0.04em;
-  text-transform: uppercase;
-  color: var(--accent);
-}
-
-.title {
-  margin: 8px 0 0;
-  font-size: clamp(2.2rem, calc(56 * var(--u)), 3.6rem);
-  font-weight: 600;
-  line-height: 1.02;
-  letter-spacing: -0.05em;
-  color: var(--ink);
+  padding: calc(12 * var(--u)) calc(18 * var(--u));
+  font: 400 calc(46 * var(--u)) / 1.13 var(--display);
+  letter-spacing: -0.035em;
   text-wrap: balance;
+  color: var(--ink);
 }
 
-.title span {
-  color: var(--silver);
+.word {
+  display: inline-block;
+  white-space: pre;
 }
 
-.lede {
+.headline b {
+  color: var(--accent);
+  font-weight: inherit;
+}
+
+.tagline {
+  left: calc(1045 * var(--u));
+  top: calc(137 * var(--u));
+  width: calc(215 * var(--u));
   margin: 0;
-  max-width: 38ch;
-  font-size: calc(16 * var(--u));
-  line-height: 1.45;
-  letter-spacing: -0.02em;
-  color: var(--silver);
+  text-align: right;
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
+  text-transform: uppercase;
+  color: var(--ink);
 }
 
-.metaLine {
+.lockup {
+  left: calc(132 * var(--u));
+  top: calc(307 * var(--u));
+  width: calc(901 * var(--u));
+  height: calc(152 * var(--u));
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px 20px;
-  margin: calc(16 * var(--u)) 0 0;
-  font-size: calc(12 * var(--u));
-  color: var(--ink-muted);
+  align-items: center;
+  margin: 0;
+  padding-left: calc(18 * var(--u));
+  overflow: hidden;
+  font: 600 calc(130 * var(--u)) / 1 var(--display);
+  letter-spacing: -0.045em;
+  white-space: nowrap;
+  color: var(--ink);
+  text-shadow:
+    0 2px 6px rgba(0, 0, 0, 0.35),
+    0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+.accent {
+  color: var(--accent);
+}
+
+.message {
+  left: calc(150 * var(--u));
+  top: calc(471 * var(--u));
+  width: calc(410 * var(--u));
+  display: grid;
+  gap: calc(12 * var(--u));
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.message p {
+  margin: 0;
+}
+
+.time {
+  left: calc(150 * var(--u));
+  top: calc(582 * var(--u));
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
+  text-transform: uppercase;
+  color: var(--ink);
+}
+
+.time::before {
+  content: "";
+  display: block;
+  width: calc(40 * var(--u));
+  height: 1px;
+  margin-bottom: calc(16 * var(--u));
+  background: var(--ink);
+}
+
+.clock {
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
 }
 
 .ctas {
+  left: calc(150 * var(--u));
+  top: calc(681 * var(--u));
   display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-  margin-top: calc(22 * var(--u));
+  gap: calc(24 * var(--u));
 }
 
-/* Framer-style secondary CTA: light fill, dark type */
-.btnChat {
-  background: rgba(245, 246, 248, 0.92);
-  color: #111315;
-  border-color: transparent;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(10 * var(--u));
+  height: calc(53 * var(--u));
+  padding: 0 calc(16 * var(--u));
+  border-radius: 8px;
+  font: 400 calc(14 * var(--u)) / 1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s ease;
 }
 
-.btnChat:hover {
-  background: #fff;
-  color: #111315;
-  border-color: transparent;
+.btnArrow {
+  font-size: 1.1em;
+  line-height: 1;
 }
 
-@media (max-width: 900px) {
-  .inner {
-    padding-top: calc(var(--nav-h) + 32px);
-    padding-bottom: 36px;
-    flex-direction: column;
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btnPrimary {
+  background: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 8px 24px -10px rgba(0, 119, 230, 0.8);
+}
+
+.btnLight {
+  background: #ffffff;
+  color: #0a0a0a;
+}
+
+.btnLight .btnArrow {
+  color: var(--accent);
+}
+
+.reel {
+  left: calc(874 * var(--u));
+  top: calc(530 * var(--u));
+  width: calc(386 * var(--u));
+  display: block;
+  color: var(--ink);
+}
+
+.reelHead {
+  display: flex;
+  align-items: center;
+  gap: calc(12 * var(--u));
+  padding: 0 calc(8 * var(--u));
+  font: 400 calc(11 * var(--u)) / 1 var(--mono);
+  text-transform: uppercase;
+}
+
+.reelHead hr {
+  flex: 1;
+  height: 1px;
+  margin: 0;
+  border: 0;
+  background: var(--rule);
+}
+
+.reelVideo {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 386 / 227;
+  margin-top: calc(12 * var(--u));
+  overflow: hidden;
+  border-radius: 8px;
+  background: #0a0a0b;
+}
+
+.reelVideo video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out);
+}
+
+.reel:hover .reelVideo video {
+  transform: scale(1.03);
+}
+
+.reelCap {
+  margin-top: calc(12 * var(--u));
+  font: 400 calc(11 * var(--u)) / 1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  transition: color 0.2s ease;
+}
+
+.reel:hover .reelCap {
+  color: var(--accent);
+}
+
+/* ---------- under 900px: one column ---------- */
+@media (max-width: 899px),
+  (max-width: 1366px) and (min-width: 900px) and (orientation: portrait) {
+  .hero {
     justify-content: flex-end;
-    gap: 16px;
+    padding-block: 0;
   }
 
-  .rail {
+  .image {
+    object-position: center 30%;
+  }
+
+  .vignette {
+    background: linear-gradient(
+      rgba(0, 0, 0, 0.15),
+      rgba(0, 0, 0, 0.55) 70%,
+      rgba(0, 0, 0, 0.85)
+    );
+  }
+
+  .stage {
+    width: auto;
+    height: auto;
+    display: grid;
+    gap: 18px;
+    padding: 28px 20px 40px;
+  }
+
+  .tick {
     display: none;
   }
 
-  .copy {
+  .headline,
+  .tagline,
+  .lockup,
+  .message,
+  .time,
+  .ctas,
+  .reel {
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    height: auto;
+  }
+
+  .headline {
+    order: 1;
+    justify-self: start;
     max-width: 100%;
-    justify-content: flex-end;
-    gap: 12px;
+    padding: 12px 14px;
+    font-size: clamp(24px, 6.6vw, 36px);
   }
 
-  .glassHeadline,
-  .glassBrand,
-  .glassBody {
-    align-self: stretch;
+  .lockup {
+    order: 2;
+    justify-self: start;
     max-width: 100%;
+    padding: 8px 12px;
+    font-size: clamp(30px, 10.4vw, 86px);
   }
 
-  /* Bias image so flower subject sits above stacked copy */
-  .image {
-    object-position: center 22%;
+  .message {
+    order: 3;
+    font-size: 11px;
   }
 
-  .scrim {
-    background:
-      linear-gradient(
-        180deg,
-        rgba(0, 0, 0, 0.42) 0%,
-        rgba(0, 0, 0, 0.18) 28%,
-        rgba(0, 0, 0, 0.65) 55%,
-        rgba(0, 0, 0, 0.92) 100%
-      ),
-      linear-gradient(
-        90deg,
-        rgba(0, 0, 0, 0.5) 0%,
-        rgba(0, 0, 0, 0.3) 50%,
-        rgba(0, 0, 0, 0.4) 100%
-      );
+  .tagline {
+    order: 4;
+    text-align: left;
+    font-size: 11px;
   }
 
-  .title {
-    font-size: clamp(1.9rem, 9vw, 2.75rem);
-  }
-
-  .lede {
-    font-size: 15px;
-  }
-
-  .glassHeadline,
-  .glassBody {
-    padding: 16px 18px;
-  }
-
-  .glassBrand {
-    padding: 12px 18px;
-    font-size: 1.25rem;
+  .time {
+    order: 5;
+    font-size: 11px;
   }
 
   .ctas {
-    margin-top: 18px;
+    order: 6;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn {
+    height: 44px;
+    font-size: 12px;
+  }
+
+  .reel {
+    order: 7;
+    width: 100%;
+    max-width: 440px;
+    min-width: 0;
+  }
+
+  .reelHead,
+  .reelCap {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 1366px) and (min-width: 900px) and (orientation: portrait) {
+  .hero {
+    min-height: calc(100svh - var(--nav-h));
+  }
+
+  .image {
+    object-position: center 20%;
+  }
+
+  .stage {
+    width: 100%;
+    margin-top: auto;
+    grid-template-columns: 1fr minmax(0, 400px);
+    grid-template-areas:
+      "headline headline"
+      "lockup lockup"
+      "message reel"
+      "tagline reel"
+      "time reel"
+      "ctas reel";
+    gap: 22px 48px;
+    padding: 0 48px 56px;
+  }
+
+  .headline {
+    grid-area: headline;
+  }
+  .lockup {
+    grid-area: lockup;
+  }
+  .message {
+    grid-area: message;
+  }
+  .tagline {
+    grid-area: tagline;
+  }
+  .time {
+    grid-area: time;
+  }
+  .ctas {
+    grid-area: ctas;
+  }
+
+  .headline,
+  .lockup {
+    width: fit-content;
+  }
+
+  .headline {
+    max-width: 560px;
+    padding: 14px 18px;
+    font-size: 44px;
+  }
+
+  .lockup {
+    padding: 10px 16px;
+    font-size: 116px;
+  }
+
+  .message,
+  .tagline,
+  .time {
+    font-size: 14px;
+  }
+
+  .btn {
+    height: 52px;
+    padding: 0 22px;
+    font-size: 14px;
+  }
+
+  .reel {
+    grid-area: reel;
+    align-self: end;
+    max-width: none;
+  }
+
+  .reelHead,
+  .reelCap {
+    font-size: 12px;
   }
 }
