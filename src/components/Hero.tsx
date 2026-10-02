@@ -8,7 +8,6 @@ import styles from "./Hero.module.css";
 const SLIDES = [
   "/hero/background.webp",
   "/hero/background-02.webp",
-  "/hero/background-03.webp",
 ] as const;
 
 /** Calm crossfade interval between hero backgrounds (ms). */
