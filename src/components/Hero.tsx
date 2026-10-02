@@ -5,13 +5,11 @@ import { useEffect, useState } from "react";
 import { SheridanClock } from "./SheridanClock";
 import styles from "./Hero.module.css";
 
-const SLIDES = [
-  "/hero/background.webp",
-  "/hero/background-02.webp",
-] as const;
-
-/** Calm crossfade interval between hero backgrounds (ms). */
-const ROTATION_MS = 6000;
+/** Theme portraits — native 2560×1440, not upscaled. */
+const PORTRAITS = {
+  dark: "/hero/portrait-dark.webp",
+  light: "/hero/portrait-light.webp",
+} as const;
 
 const TICKS = [
   { label: "// 00.01°", y: 90 },
@@ -30,11 +28,10 @@ type HeroTheme = "dark" | "light";
  * full-bleed media (bleeds under nav only; stage/CTAs clear of --nav-h),
  * soft scrims on headline + lockup, side ticks, mono message lines,
  * Sheridan time, craft/chat CTAs, showreel plate on the right.
- * Keeps botstudio rotating images, particle dots, and breathe.
+ * Theme swaps the portrait (black vs white). Particle dots and breathe stay.
  * Hero-only light/dark treatment (in-session; does not theme the rest of the site).
  */
 export function Hero() {
-  const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
   const [heroTheme, setHeroTheme] = useState<HeroTheme>("dark");
@@ -46,14 +43,6 @@ export function Hero() {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
-
-  useEffect(() => {
-    if (reduceMotion || paused) return;
-    const id = window.setInterval(() => {
-      setActive((i) => (i + 1) % SLIDES.length);
-    }, ROTATION_MS);
-    return () => window.clearInterval(id);
-  }, [reduceMotion, paused]);
 
   const heroClass = [
     styles.hero,
@@ -73,18 +62,18 @@ export function Hero() {
       onMouseLeave={() => setPaused(false)}
     >
       <div className={styles.media} aria-hidden="true">
-        {SLIDES.map((src, i) => (
+        {(Object.keys(PORTRAITS) as HeroTheme[]).map((theme) => (
           <Image
-            key={src}
-            src={src}
+            key={theme}
+            src={PORTRAITS[theme]}
             alt=""
             fill
-            priority={i === 0}
-            loading={i === 0 ? "eager" : "lazy"}
+            priority={theme === "dark"}
+            loading={theme === "dark" ? "eager" : "lazy"}
             sizes="100vw"
             className={[
               styles.image,
-              i === active ? styles.imageActive : "",
+              theme === "dark" ? styles.imageDark : styles.imageLight,
               !reduceMotion ? styles.imageBreathe : "",
             ]
               .filter(Boolean)

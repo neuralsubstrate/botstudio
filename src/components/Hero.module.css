@@ -57,20 +57,17 @@
   object-fit: cover;
   object-position: center 42%;
   opacity: 0;
-  transition: opacity 1.2s ease-in-out;
+  visibility: hidden;
+  transition: opacity 0.45s ease;
   transform-origin: center center;
   will-change: opacity, transform;
 }
 
-.imageActive {
+/* One portrait per treatment — the other stays hidden, not washed out. */
+.hero[data-hero-theme="dark"] .imageDark,
+.hero[data-hero-theme="light"] .imageLight {
   opacity: 1;
-}
-
-/* Hide dark portrait entirely — light mode is a clean light field. */
-.hero[data-hero-theme="light"] .image,
-.hero[data-hero-theme="light"] .imageActive {
-  opacity: 0;
-  visibility: hidden;
+  visibility: visible;
 }
 
 .imageBreathe {
@@ -113,8 +110,8 @@
 }
 
 .hero[data-hero-theme="light"] .vignette {
-  /* Solid light field — not a translucent sheet over the photo. */
-  background: #f6f7f9;
+  /* Let the white portrait show. No flat wash over the photo. */
+  background: transparent;
 }
 
 /* Fine particle/dot grid — kept from botstudio */
@@ -136,10 +133,10 @@
 }
 
 .hero[data-hero-theme="light"] .dotGrid {
-  opacity: 0.35;
+  opacity: 0.12;
   background-image: radial-gradient(
     circle,
-    #c5c9d0 0.5px,
+    #b7bcc4 0.5px,
     transparent 0.55px
   );
 }
@@ -494,7 +491,7 @@
   }
 
   .hero[data-hero-theme="light"] .vignette {
-    background: #f6f7f9;
+    background: transparent;
   }
 
   .stage {
