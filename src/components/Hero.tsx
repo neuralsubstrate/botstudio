@@ -44,6 +44,13 @@ export function Hero() {
     return () => mq.removeEventListener("change", sync);
   }, []);
 
+  useEffect(() => {
+    document.documentElement.dataset.heroTheme = heroTheme;
+    return () => {
+      delete document.documentElement.dataset.heroTheme;
+    };
+  }, [heroTheme]);
+
   const heroClass = [
     styles.hero,
     paused || reduceMotion ? styles.paused : "",
@@ -131,7 +138,7 @@ export function Hero() {
           <span>\Studios</span>
         </h1>
 
-        <div className={styles.message}>
+        <div className={`${styles.message} ${styles.scrim}`}>
           <p>Small studio, worldwide tech.</p>
           <p>We create stories people remember.</p>
         </div>

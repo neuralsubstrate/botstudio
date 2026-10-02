@@ -24,7 +24,9 @@
   /* Content clears the fixed nav; only .media bleeds under it. */
   min-height: calc(100svh - var(--nav-h));
   padding-block: calc(4 * var(--hu));
-  overflow: hidden;
+  /* Visible so the portrait can show through the transparent nav.
+     The scaled photo stays clipped by .media. */
+  overflow: visible;
   border-bottom: 1px solid var(--rule);
   background: var(--bg-deep);
   color: var(--hero-ink);
@@ -121,10 +123,11 @@
   inset: 0;
   z-index: 1;
   pointer-events: none;
-  opacity: 0.25;
+  /* Light dots so the same grain reads on the black portrait. */
+  opacity: 0.65;
   background-image: radial-gradient(
     circle,
-    #3d3d3d 0.5px,
+    #d5d8de 0.5px,
     transparent 0.55px
   );
   background-size: 4px 4px;
@@ -324,12 +327,14 @@
 .message {
   left: calc(150 * var(--hu));
   top: calc(475 * var(--hu));
-  width: calc(410 * var(--hu));
+  width: fit-content;
+  max-width: calc(460 * var(--hu));
   display: grid;
-  gap: calc(10 * var(--hu));
+  gap: calc(8 * var(--hu));
+  padding: calc(8 * var(--hu)) calc(16 * var(--hu));
   font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
   text-transform: uppercase;
-  color: var(--hero-ink);
+  color: #ffffff;
 }
 
 .message p {
@@ -338,7 +343,7 @@
 
 .time {
   left: calc(150 * var(--hu));
-  top: calc(555 * var(--hu));
+  top: calc(562 * var(--hu));
   font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
   text-transform: uppercase;
   color: var(--hero-ink);
