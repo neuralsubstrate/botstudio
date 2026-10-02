@@ -29,11 +29,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${figtree.variable} h-full antialiased`}>
+    <html lang="en" data-theme="light" className={`${figtree.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");if(t==="light")document.documentElement.dataset.theme="light";}catch(e){}})();`,
+            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");if(t==="dark")document.documentElement.dataset.theme="dark";else document.documentElement.dataset.theme="light";}catch(e){}})();`,
           }}
         />
         <SmoothScroll />

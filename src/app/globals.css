@@ -2,18 +2,18 @@
 @import "@fontsource/fragment-mono/400.css";
 
 :root {
-  --bg: #161719;
-  --bg-deep: #000000;
-  --ink: #ffffff;
-  --ink-dim: #797d82;
-  --ink-muted: #5c6063;
+  --bg: #f6f7f9;
+  --bg-deep: #ffffff;
+  --ink: #141414;
+  --ink-dim: #5c6063;
+  --ink-muted: #797d82;
   --silver: #d5d7de;
   --grey-0: #fafafa;
   --grey-1: #f2f2f2;
   --accent: #0077e6;
-  --mist: #d0d6e0;
-  --rule: rgba(255, 255, 255, 0.12);
-  --rule-strong: rgba(255, 255, 255, 0.28);
+  --mist: #3a3d42;
+  --rule: rgba(20, 20, 20, 0.12);
+  --rule-strong: rgba(20, 20, 20, 0.28);
   --display: var(--font-figtree), "Helvetica Neue", Arial, sans-serif;
   --mono: "Fragment Mono", var(--font-fragment-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
   --scale: 0.9;
@@ -25,20 +25,20 @@
   --cta-radius: 12px;
   --nav-h: calc(60 * var(--u));
   --ease-out: cubic-bezier(0.2, 0.75, 0.2, 1);
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 
-html[data-theme="light"] {
-  --bg: #f6f7f9;
-  --bg-deep: #ffffff;
-  --ink: #141414;
-  --ink-dim: #5c6063;
-  --ink-muted: #797d82;
-  --mist: #3a3d42;
-  --rule: rgba(20, 20, 20, 0.12);
-  --rule-strong: rgba(20, 20, 20, 0.28);
-  color-scheme: light;
+html[data-theme="dark"] {
+  --bg: #161719;
+  --bg-deep: #000000;
+  --ink: #ffffff;
+  --ink-dim: #797d82;
+  --ink-muted: #5c6063;
+  --mist: #d0d6e0;
+  --rule: rgba(255, 255, 255, 0.12);
+  --rule-strong: rgba(255, 255, 255, 0.28);
+  color-scheme: dark;
 }
 
 @media (max-width: 900px) {
