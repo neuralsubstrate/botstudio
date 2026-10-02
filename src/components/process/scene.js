@@ -198,6 +198,8 @@ export function mountProcessScene({ track: wrapEl, mount, flash, images, onCta }
     const SURF = light
         ? { page: "#FFFFFF", grid: "rgba(0,0,0,0.045)", bar: "#F2F4F7", pill: "#E6E9EE", muted: "#6B7280", dot: "#D3D8DF", panel: "#FFFFFF", ghostLine: "rgba(0,0,0,0.22)", line: 0x0a0a0a }
         : { page: "#0f1012", grid: "rgba(255,255,255,0.035)", bar: "#191b1f", pill: "#24262b", muted: "#a3a8b0", dot: "#3a3d44", panel: "#0f1012", ghostLine: "rgba(255,255,255,0.35)", line: 0xffffff }
+    // The browser is the one light surface in the otherwise dark film.
+    const BROWSER_SURF = { page: "#FFFFFF", grid: "rgba(0,0,0,0.045)", bar: "#F2F4F7", pill: "#E6E9EE", muted: "#6B7280", dot: "#D3D8DF" }
 
     // ---------- renderer, scene, camera ----------
     // Transparent: the pieces sit straight on the section's own background.
@@ -270,9 +272,9 @@ export function mountProcessScene({ track: wrapEl, mount, flash, images, onCta }
     const fg = textColor
 
     const windowTex = canvasTexture(1600, 1000, (ctx, w, h) => {
-        ctx.fillStyle = SURF.page
+        ctx.fillStyle = BROWSER_SURF.page
         ctx.fillRect(0, 0, w, h)
-        ctx.strokeStyle = SURF.grid
+        ctx.strokeStyle = BROWSER_SURF.grid
         ctx.lineWidth = 2
         for (let x = 0; x <= w; x += 80) {
             ctx.beginPath(); ctx.moveTo(x, 70); ctx.lineTo(x, h); ctx.stroke()
@@ -280,16 +282,16 @@ export function mountProcessScene({ track: wrapEl, mount, flash, images, onCta }
         for (let y = 70; y <= h; y += 80) {
             ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke()
         }
-        ctx.fillStyle = SURF.bar
+        ctx.fillStyle = BROWSER_SURF.bar
         ctx.fillRect(0, 0, w, 70)
-        ;["#ff5f57", SURF.dot, SURF.dot].forEach((c, i) => {
+        ;["#ff5f57", BROWSER_SURF.dot, BROWSER_SURF.dot].forEach((c, i) => {
             ctx.fillStyle = i === 0 ? accentHex : c
             ctx.beginPath(); ctx.arc(44 + i * 34, 35, 10, 0, Math.PI * 2); ctx.fill()
         })
         roundRect(ctx, w / 2 - 220, 17, 440, 36, 18)
-        ctx.fillStyle = SURF.pill
+        ctx.fillStyle = BROWSER_SURF.pill
         ctx.fill()
-        ctx.fillStyle = SURF.muted
+        ctx.fillStyle = BROWSER_SURF.muted
         ctx.font = `500 20px ${SANS}`
         ctx.textAlign = "center"
         ctx.textBaseline = "middle"
