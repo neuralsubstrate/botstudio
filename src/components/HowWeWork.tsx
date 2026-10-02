@@ -4,10 +4,9 @@ import { useEffect, useRef } from "react";
 import { PROCESS } from "@/lib/content";
 import styles from "./HowWeWork.module.css";
 
-/** Sticky horizontal step film: vertical scroll scrubs Discovery → Launch
- *  across a pinned stage. One full-bleed frame at a time — never a 4-up
- *  card grid. Lenis-compatible via getBoundingClientRect progress.
- *  Reduced motion collapses to a stacked list. */
+/** Sticky full-viewport step film: vertical scroll scrubs one step at a
+ *  time across a pinned stage. Exactly one slide fills the stage — never
+ *  a multi-card grid or side-by-side peeks. Lenis-compatible. */
 export function HowWeWork() {
   const sectionRef = useRef<HTMLElement>(null);
   const stripRef = useRef<HTMLDivElement>(null);
@@ -52,8 +51,9 @@ export function HowWeWork() {
       const total = r.height - window.innerHeight;
       const p = total > 0 ? clamp01(-r.top / total) : 0;
 
-      const maxX = Math.max(0, strip.scrollWidth - strip.clientWidth);
-      const x = maxX * p;
+      // Travel in exact stage widths so only one slide fills the clip
+      const stage = (strip.parentElement?.clientWidth || strip.clientWidth || window.innerWidth);
+      const x = stage * p * (n - 1);
       strip.style.transform = `translate3d(${-x}px, 0, 0)`;
       fill.style.transform = `scaleX(${p})`;
 
@@ -110,26 +110,21 @@ export function HowWeWork() {
       aria-labelledby="how-we-work-title"
     >
       <div className={styles.pin}>
-        <div className={styles.top}>
+        <header className={styles.chrome}>
           <div className={styles.labelRow}>
             <span className={styles.label}>{"// 00.06° How we work"}</span>
-            <span className={styles.filmCue} aria-hidden="true">
-              Sticky film · scroll to scrub
-            </span>
             <span ref={indexRef} className={styles.liveIndex} aria-hidden="true">
               01 / 04
             </span>
           </div>
-          <div className={styles.intro}>
-            <h2 id="how-we-work-title" className={styles.title}>
-              Four steps, no theater
-            </h2>
-            <p className={styles.lead}>
-              A straightforward path from first conversation to a site that keeps
-              earning its keep — one frame at a time.
-            </p>
-          </div>
-        </div>
+          <h2 id="how-we-work-title" className={styles.title}>
+            Four steps, no theater
+          </h2>
+          <p className={styles.lead}>
+            One frame at a time — from first conversation to a site that keeps
+            earning its keep.
+          </p>
+        </header>
 
         <div className={styles.viewport}>
           <div ref={stripRef} className={styles.strip}>
@@ -138,18 +133,17 @@ export function HowWeWork() {
                 key={step.step}
                 data-step
                 data-active={i === 0 ? "" : undefined}
-                className={styles.frame}
+                className={styles.slide}
                 style={{ ["--i" as string]: String(i) }}
               >
                 <span className={styles.watermark} aria-hidden="true">
                   {step.step}
                 </span>
-                <div className={styles.frameBody}>
+                <div className={styles.slideBody}>
                   <span className={styles.stepNum}>{step.step}</span>
                   <h3 className={styles.stepTitle}>{step.title}</h3>
                   <p className={styles.stepBody}>{step.body}</p>
                 </div>
-                <div className={styles.rail} aria-hidden="true" />
               </article>
             ))}
           </div>
