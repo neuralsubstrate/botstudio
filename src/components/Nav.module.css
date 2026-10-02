@@ -1,6 +1,6 @@
-/* Size tokens preserved from prior botstudio nav:
-   height: var(--nav-h); logo type calc(18 * var(--u));
-   links calc(14 * var(--u)); CTA padding 12px 16px / calc(13 * var(--u)). */
+/* Size tokens: height var(--nav-h); logo calc(18 * var(--u));
+   links calc(14 * var(--u)). CTA matches botsign .nav-cta:
+   padding 9px 17px / font-size 13.5px / radius 8px (--radius-buttons). */
 
 .nav {
   position: fixed;
@@ -483,8 +483,10 @@
 }
 
 .cta {
-  padding: 12px 16px;
-  font-size: calc(13 * var(--u));
+  /* botsign .nav-cta @ ≥861px + .btn-primary radius */
+  padding: 9px 17px;
+  font-size: 13.5px;
+  border-radius: 8px;
 }
 
 .toggle {
