@@ -1,19 +1,60 @@
+"use client";
+
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { SITE } from "@/lib/content";
 import styles from "./Hero.module.css";
 
+const SLIDES = [
+  "/hero/background.webp",
+  "/hero/background-02.webp",
+  "/hero/background-03.webp",
+] as const;
+
+/** Calm crossfade interval between hero backgrounds (ms). */
+const ROTATION_MS = 6000;
+
 export function Hero() {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [reduceMotion, setReduceMotion] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduceMotion(mq.matches);
+    sync();
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
+
+  useEffect(() => {
+    if (reduceMotion || paused) return;
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, ROTATION_MS);
+    return () => window.clearInterval(id);
+  }, [reduceMotion, paused]);
+
   return (
-    <section className={styles.hero} aria-labelledby="hero-title">
+    <section
+      className={styles.hero}
+      aria-labelledby="hero-title"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
       <div className={styles.media} aria-hidden="true">
-        <Image
-          src="/hero/background.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className={styles.image}
-        />
+        {SLIDES.map((src, i) => (
+          <Image
+            key={src}
+            src={src}
+            alt=""
+            fill
+            priority={i === 0}
+            loading={i === 0 ? "eager" : "lazy"}
+            sizes="100vw"
+            className={`${styles.image} ${i === active ? styles.imageActive : ""}`}
+          />
+        ))}
         <div className={styles.scrim} />
       </div>
 
