@@ -6,7 +6,7 @@ import { ChatModal } from "./process/ChatModal";
 import styles from "./ProcessFilm.module.css";
 
 const STEPS = ["Discovery", "Strategy", "Design & Build", "Launch & Grow"];
-const IMAGES = ["/process/hero.jpg", "/process/card-1.jpg", "/process/card-2.jpg", "/process/card-3.jpg"];
+const IMAGES = ["/hero/background.webp", "/process/card-1.jpg", "/process/card-2.jpg", "/process/card-3.jpg"];
 
 /** The section under the hero: a website assembling itself, drawn live in 3D
  *  and driven by scroll (scrolling back plays it backwards). The canvas is

@@ -25,8 +25,9 @@ const HEADLINE =
 
 /**
  * Honest hero aligned to botlane.tech / bot-studio:
- * full-bleed media, soft scrims on headline + lockup, side ticks,
- * mono message lines, Sheridan time, craft/chat CTAs, showreel.
+ * full-bleed media (bleeds under nav only; stage/CTAs clear of --nav-h),
+ * soft scrims on headline + lockup, side ticks, mono message lines,
+ * Sheridan time, craft/chat CTAs, showreel plate on the right.
  * Keeps botstudio rotating images, particle dots, and breathe.
  */
 export function Hero() {

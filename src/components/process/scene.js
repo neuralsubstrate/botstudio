@@ -380,7 +380,7 @@ export function mountProcessScene({ track: wrapEl, mount, flash, images, onCta }
         { id: "window", w: 16, h: 10, d: 0.32, r: 0.6, tex: windowTex.tex, final: [0, 0, 0], layer: -1 },
         { id: "nav", w: 14.6, h: 0.63, d: 0.14, r: 0.3, tex: navTex.tex, final: [0, 3.55, 0.34], layer: 0 },
         { id: "headline", w: 7.4, h: 2.6, d: 0.14, r: 0.22, tex: headTex.tex, final: [-3.6, 1.45, 0.34], layer: 1 },
-        { id: "hero", w: 6.7, h: 4.4, d: 0.22, r: 0.34, img: 0, final: [3.85, 1.05, 0.42], layer: 1 },
+        { id: "hero", w: 6.7, h: 4.05, d: 0.22, r: 0.34, img: 0, final: [3.85, 0.93, 0.42], layer: 1 },
         { id: "cta", w: 2.7, h: 0.82, d: 0.24, r: 0.41, tex: ctaTex.tex, final: [-5.95, -0.75, 0.5], layer: 2, accentClay: true },
         { id: "ghost", w: 2.7, h: 0.82, d: 0.2, r: 0.41, tex: ghostTex.tex, final: [-3.05, -0.75, 0.45], layer: 2 },
         { id: "card1", w: 4.6, h: 2.6, d: 0.18, r: 0.3, img: 1, final: [-5.05, -3.35, 0.4], layer: 0 },

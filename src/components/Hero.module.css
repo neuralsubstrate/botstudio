@@ -7,8 +7,8 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  min-height: 100svh;
-  margin-top: calc(-1 * var(--nav-h));
+  /* Content clears the fixed nav; only .media bleeds under it. */
+  min-height: calc(100svh - var(--nav-h));
   padding-block: calc(14 * var(--u));
   overflow: hidden;
   border-bottom: 1px solid var(--rule);
@@ -17,7 +17,8 @@
 
 .media {
   position: absolute;
-  inset: 0;
+  /* Full-bleed under the transparent nav, without pulling stage/CTAs up. */
+  inset: calc(-1 * var(--nav-h)) 0 0;
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
