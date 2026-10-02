@@ -1,19 +1,7 @@
-/* Honest hero — dark portrait, glass panels, white type. */
+/* Honest hero — structure/copy from botlane.tech (bot-studio), with
+   botstudio rotating backgrounds, particle dots, and Ken Burns breathe. */
 
 .hero {
-  /* Height-aware unit so the stage fits under the nav at short viewports
-     (e.g. 1280×800 window with browser chrome). */
-  --hu: min(
-    var(--u),
-    calc((100svh - var(--nav-h) - 8px) / 780)
-  );
-  --hero-ink: var(--ink);
-  --hero-ink-dim: var(--ink-dim);
-  --hero-rule: var(--rule);
-  --hero-scrim: rgba(0, 0, 0, 0.36);
-  --hero-tick-line: rgba(255, 255, 255, 0.7);
-  --hero-media-bg: #0b0d10;
-
   position: relative;
   isolation: isolate;
   display: flex;
@@ -21,11 +9,10 @@
   justify-content: center;
   /* Content clears the fixed nav; only .media bleeds under it. */
   min-height: calc(100svh - var(--nav-h));
-  padding-block: calc(4 * var(--hu));
+  padding-block: calc(14 * var(--u));
   overflow: hidden;
   border-bottom: 1px solid var(--rule);
   background: var(--bg-deep);
-  color: var(--hero-ink);
 }
 
 .media {
@@ -35,16 +22,20 @@
   z-index: 0;
   pointer-events: none;
   overflow: hidden;
-  background: var(--hero-media-bg);
+  background: #0b0d10;
 }
 
 .image {
   object-fit: cover;
   object-position: center 42%;
-  opacity: 1;
+  opacity: 0;
   transition: opacity 1.2s ease-in-out;
   transform-origin: center center;
   will-change: opacity, transform;
+}
+
+.imageActive {
+  opacity: 1;
 }
 
 .imageBreathe {
@@ -83,7 +74,6 @@
     rgba(0, 0, 0, 0.1),
     rgba(0, 0, 0, 0.45)
   );
-  transition: background 0.35s ease;
 }
 
 /* Fine particle/dot grid — kept from botstudio */
@@ -101,15 +91,14 @@
   background-size: 4px 4px;
   background-position: center;
   background-repeat: repeat;
-  transition: opacity 0.35s ease;
 }
 
-/* Artboard stage — scaled with --hu so CTAs + reel stay inside short viewports */
+/* Artboard stage (1280 × 820 at --u), matching live botlane.tech */
 .stage {
   position: relative;
   z-index: 1;
-  width: calc(1280 * var(--hu));
-  height: calc(780 * var(--hu));
+  width: calc(1280 * var(--u));
+  height: calc(820 * var(--u));
   margin: 0 auto;
 }
 
@@ -126,27 +115,27 @@
 
 /* Side ticks — live // 00.0x° marks */
 .tick {
-  left: calc(20 * var(--hu));
-  top: calc(var(--y) * var(--hu));
+  left: calc(20 * var(--u));
+  top: calc(var(--y) * var(--u));
   display: flex;
   align-items: center;
-  font: 400 calc(9 * var(--hu)) / 1 var(--mono);
-  color: var(--hero-ink-dim);
+  font: 400 calc(9 * var(--u)) / 1 var(--mono);
+  color: var(--ink-dim);
   letter-spacing: 0.04em;
   user-select: none;
 }
 
 .tickMark {
-  width: calc(8 * var(--hu));
-  height: calc(3 * var(--hu));
-  background: var(--hero-ink);
+  width: calc(8 * var(--u));
+  height: calc(3 * var(--u));
+  background: var(--ink);
 }
 
 .tickLine {
-  width: calc(26 * var(--hu));
+  width: calc(26 * var(--u));
   height: 1px;
-  margin-right: calc(12 * var(--hu));
-  background: var(--hero-tick-line);
+  margin-right: calc(12 * var(--u));
+  background: rgba(255, 255, 255, 0.7);
 }
 
 .tickLabel {
@@ -155,22 +144,22 @@
 
 /* Soft live-style scrim — not Framer bordered glass cards */
 .scrim {
-  background: var(--hero-scrim);
+  background: rgba(0, 0, 0, 0.36);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
   border-radius: 14px;
 }
 
 .headline {
-  left: calc(229 * var(--hu));
-  top: calc(88 * var(--hu));
-  width: calc(620 * var(--hu));
+  left: calc(229 * var(--u));
+  top: calc(151 * var(--u));
+  width: calc(592 * var(--u));
   margin: 0;
-  padding: calc(10 * var(--hu)) calc(16 * var(--hu));
-  font: 400 calc(40 * var(--hu)) / 1.12 var(--display);
+  padding: calc(12 * var(--u)) calc(18 * var(--u));
+  font: 400 calc(46 * var(--u)) / 1.13 var(--display);
   letter-spacing: -0.035em;
   text-wrap: balance;
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 
 .word {
@@ -184,32 +173,30 @@
 }
 
 .tagline {
-  left: calc(1045 * var(--hu));
-  top: calc(120 * var(--hu));
-  width: calc(215 * var(--hu));
+  left: calc(1045 * var(--u));
+  top: calc(137 * var(--u));
+  width: calc(215 * var(--u));
   margin: 0;
   text-align: right;
-  font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
   text-transform: uppercase;
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 
-/* Lockup sits fully below the headline card (no overlap). */
 .lockup {
-  left: calc(132 * var(--hu));
-  top: calc(345 * var(--hu));
-  width: fit-content;
-  max-width: calc(1100 * var(--hu));
-  height: calc(118 * var(--hu));
+  left: calc(132 * var(--u));
+  top: calc(307 * var(--u));
+  width: calc(901 * var(--u));
+  height: calc(152 * var(--u));
   display: flex;
   align-items: center;
   margin: 0;
-  padding-inline: calc(18 * var(--hu));
+  padding-left: calc(18 * var(--u));
   overflow: hidden;
-  font: 600 calc(100 * var(--hu)) / 1 var(--display);
+  font: 600 calc(130 * var(--u)) / 1 var(--display);
   letter-spacing: -0.045em;
   white-space: nowrap;
-  color: var(--hero-ink);
+  color: var(--ink);
   text-shadow:
     0 2px 6px rgba(0, 0, 0, 0.35),
     0 10px 30px rgba(0, 0, 0, 0.35);
@@ -220,14 +207,14 @@
 }
 
 .message {
-  left: calc(150 * var(--hu));
-  top: calc(475 * var(--hu));
-  width: calc(410 * var(--hu));
+  left: calc(150 * var(--u));
+  top: calc(471 * var(--u));
+  width: calc(410 * var(--u));
   display: grid;
-  gap: calc(10 * var(--hu));
-  font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
+  gap: calc(12 * var(--u));
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
   text-transform: uppercase;
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 
 .message p {
@@ -235,20 +222,20 @@
 }
 
 .time {
-  left: calc(150 * var(--hu));
-  top: calc(555 * var(--hu));
-  font: 400 calc(14 * var(--hu)) / 1.5 var(--mono);
+  left: calc(150 * var(--u));
+  top: calc(582 * var(--u));
+  font: 400 calc(14 * var(--u)) / 1.5 var(--mono);
   text-transform: uppercase;
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 
 .time::before {
   content: "";
   display: block;
-  width: calc(40 * var(--hu));
+  width: calc(40 * var(--u));
   height: 1px;
-  margin-bottom: calc(14 * var(--hu));
-  background: var(--hero-ink);
+  margin-bottom: calc(16 * var(--u));
+  background: var(--ink);
 }
 
 .clock {
@@ -257,20 +244,20 @@
 }
 
 .ctas {
-  left: calc(150 * var(--hu));
-  top: calc(640 * var(--hu));
+  left: calc(150 * var(--u));
+  top: calc(681 * var(--u));
   display: flex;
-  gap: calc(24 * var(--hu));
+  gap: calc(24 * var(--u));
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: calc(10 * var(--hu));
-  height: calc(50 * var(--hu));
-  padding: 0 calc(16 * var(--hu));
+  gap: calc(10 * var(--u));
+  height: calc(53 * var(--u));
+  padding: 0 calc(16 * var(--u));
   border-radius: 8px;
-  font: 400 calc(14 * var(--hu)) / 1 var(--mono);
+  font: 400 calc(14 * var(--u)) / 1 var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   transition:
@@ -303,19 +290,19 @@
 }
 
 .reel {
-  left: calc(874 * var(--hu));
-  top: calc(490 * var(--hu));
-  width: calc(386 * var(--hu));
+  left: calc(874 * var(--u));
+  top: calc(530 * var(--u));
+  width: calc(386 * var(--u));
   display: block;
-  color: var(--hero-ink);
+  color: var(--ink);
 }
 
 .reelHead {
   display: flex;
   align-items: center;
-  gap: calc(12 * var(--hu));
-  padding: 0 calc(8 * var(--hu));
-  font: 400 calc(11 * var(--hu)) / 1 var(--mono);
+  gap: calc(12 * var(--u));
+  padding: 0 calc(8 * var(--u));
+  font: 400 calc(11 * var(--u)) / 1 var(--mono);
   text-transform: uppercase;
 }
 
@@ -324,14 +311,14 @@
   height: 1px;
   margin: 0;
   border: 0;
-  background: var(--hero-rule);
+  background: var(--rule);
 }
 
 .reelVideo {
   position: relative;
   width: 100%;
-  aspect-ratio: 386 / 200;
-  margin-top: calc(10 * var(--hu));
+  aspect-ratio: 386 / 227;
+  margin-top: calc(12 * var(--u));
   overflow: hidden;
   border-radius: 8px;
   background: #0a0a0b;
@@ -350,8 +337,8 @@
 }
 
 .reelCap {
-  margin-top: calc(10 * var(--hu));
-  font: 400 calc(11 * var(--hu)) / 1 var(--mono);
+  margin-top: calc(12 * var(--u));
+  font: 400 calc(11 * var(--u)) / 1 var(--mono);
   text-transform: uppercase;
   letter-spacing: 0.02em;
   transition: color 0.2s ease;
@@ -365,7 +352,6 @@
 @media (max-width: 899px),
   (max-width: 1366px) and (min-width: 900px) and (orientation: portrait) {
   .hero {
-    --hu: var(--u);
     justify-content: flex-end;
     padding-block: 0;
   }

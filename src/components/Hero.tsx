@@ -5,13 +5,19 @@ import { useEffect, useState } from "react";
 import { SheridanClock } from "./SheridanClock";
 import styles from "./Hero.module.css";
 
-const PORTRAIT = "/hero/portrait-dark.webp";
+const SLIDES = [
+  "/hero/background.webp",
+  "/hero/background-02.webp",
+] as const;
+
+/** Calm crossfade interval between hero backgrounds (ms). */
+const ROTATION_MS = 6000;
 
 const TICKS = [
-  { label: "// 00.01°", y: 90 },
-  { label: "// 00.02°", y: 220 },
-  { label: "// 00.03°", y: 350 },
-  { label: "// 00.04°", y: 540 },
+  { label: "// 00.01°", y: 102 },
+  { label: "// 00.02°", y: 248 },
+  { label: "// 00.03°", y: 383 },
+  { label: "// 00.04°", y: 597 },
 ] as const;
 
 const HEADLINE =
@@ -22,9 +28,10 @@ const HEADLINE =
  * full-bleed media (bleeds under nav only; stage/CTAs clear of --nav-h),
  * soft scrims on headline + lockup, side ticks, mono message lines,
  * Sheridan time, craft/chat CTAs, showreel plate on the right.
- * Dark portrait only. Particle dots and breathe stay.
+ * Keeps botstudio rotating images, particle dots, and breathe.
  */
 export function Hero() {
+  const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -35,6 +42,14 @@ export function Hero() {
     mq.addEventListener("change", sync);
     return () => mq.removeEventListener("change", sync);
   }, []);
+
+  useEffect(() => {
+    if (reduceMotion || paused) return;
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % SLIDES.length);
+    }, ROTATION_MS);
+    return () => window.clearInterval(id);
+  }, [reduceMotion, paused]);
 
   const heroClass = [
     styles.hero,
@@ -51,16 +66,24 @@ export function Hero() {
       onMouseLeave={() => setPaused(false)}
     >
       <div className={styles.media} aria-hidden="true">
-        <Image
-          src={PORTRAIT}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className={[styles.image, !reduceMotion ? styles.imageBreathe : ""]
-            .filter(Boolean)
-            .join(" ")}
-        />
+        {SLIDES.map((src, i) => (
+          <Image
+            key={src}
+            src={src}
+            alt=""
+            fill
+            priority={i === 0}
+            loading={i === 0 ? "eager" : "lazy"}
+            sizes="100vw"
+            className={[
+              styles.image,
+              i === active ? styles.imageActive : "",
+              !reduceMotion ? styles.imageBreathe : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
+          />
+        ))}
         <div className={styles.vignette} />
         <div className={styles.dotGrid} />
       </div>

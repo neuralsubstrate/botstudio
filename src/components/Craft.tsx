@@ -47,7 +47,7 @@ export function Craft() {
   const current = SURFACES[active]!;
 
   return (
-    <section id="craft" className={styles.section} data-nav-theme="light">
+    <section id="craft" className={styles.section} data-nav-theme="dark">
       <div className={styles.shell}>
         <header className={styles.header}>
           <p className={styles.kicker}>{"// Craft"}</p>
