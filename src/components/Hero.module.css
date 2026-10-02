@@ -31,13 +31,14 @@
 }
 
 .hero[data-hero-theme="light"] {
-  /* Genuine light palette — solid light surface, no wash over dark media. */
+  /* Surrounding type sits on the white portrait, so it goes dark.
+     Panel copy is forced back to white on tinted glass below. */
   --hero-ink: #141414;
-  --hero-ink-dim: #5c6063;
-  --hero-rule: rgba(20, 20, 20, 0.16);
-  --hero-scrim: #ffffff;
-  --hero-tick-line: rgba(20, 20, 20, 0.4);
-  --hero-media-bg: #f6f7f9;
+  --hero-ink-dim: #3e4348;
+  --hero-rule: rgba(20, 20, 20, 0.28);
+  --hero-scrim: rgba(16, 20, 28, 0.42);
+  --hero-tick-line: rgba(20, 20, 20, 0.45);
+  --hero-media-bg: #f4f5f7;
   background: #f6f7f9;
   color: #141414;
   border-bottom-color: rgba(20, 20, 20, 0.12);
@@ -182,10 +183,12 @@
 }
 
 .hero[data-hero-theme="light"] .themeToggle {
-  background: #ffffff;
-  border-color: rgba(20, 20, 20, 0.18);
-  color: #141414;
-  box-shadow: 0 4px 14px -8px rgba(20, 20, 20, 0.2);
+  background: rgba(16, 20, 28, 0.42);
+  border-color: rgba(255, 255, 255, 0.42);
+  color: #ffffff;
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 
 .themeIcon {
@@ -245,11 +248,14 @@
   border-radius: 14px;
 }
 
+/* Light portrait: same glass language, darker tint so white type still reads. */
 .hero[data-hero-theme="light"] .scrim {
-  -webkit-backdrop-filter: none;
-  backdrop-filter: none;
-  border: 1px solid rgba(20, 20, 20, 0.1);
-  box-shadow: 0 10px 28px -16px rgba(20, 20, 20, 0.18);
+  background: rgba(16, 20, 28, 0.46);
+  border: 1px solid rgba(255, 255, 255, 0.38);
+  box-shadow: none;
+  -webkit-backdrop-filter: blur(18px) saturate(1.15);
+  backdrop-filter: blur(18px) saturate(1.15);
+  color: #ffffff;
 }
 
 .headline {
@@ -305,8 +311,9 @@
     0 10px 30px rgba(0, 0, 0, 0.35);
 }
 
+.hero[data-hero-theme="light"] .headline,
 .hero[data-hero-theme="light"] .lockup {
-  text-shadow: none;
+  color: #ffffff;
 }
 
 .accent {
@@ -392,18 +399,11 @@
   color: #0a0a0a;
 }
 
-.hero[data-hero-theme="light"] .btnLight {
-  background: #141414;
-  color: #ffffff;
-}
 
 .btnLight .btnArrow {
   color: var(--accent);
 }
 
-.hero[data-hero-theme="light"] .btnLight .btnArrow {
-  color: #7eb6f5;
-}
 
 .reel {
   left: calc(874 * var(--hu));
