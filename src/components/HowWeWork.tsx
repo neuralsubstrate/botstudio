@@ -4,29 +4,26 @@ import { useEffect, useRef } from "react";
 import { PROCESS } from "@/lib/content";
 import styles from "./HowWeWork.module.css";
 
-/** Sticky full-viewport step film: vertical scroll scrubs one step at a
- *  time across a pinned stage. Exactly one slide fills the stage — never
- *  a multi-card grid or side-by-side peeks. Lenis-compatible. */
+/** Sticky vertical step film: exactly one step fills the viewport.
+ *  No horizontal strip — impossible to render as four side-by-side cards. */
 export function HowWeWork() {
   const sectionRef = useRef<HTMLElement>(null);
-  const stripRef = useRef<HTMLDivElement>(null);
   const fillRef = useRef<HTMLDivElement>(null);
   const indexRef = useRef<HTMLSpanElement>(null);
   const titleRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const section = sectionRef.current;
-    const strip = stripRef.current;
     const fill = fillRef.current;
     const indexEl = indexRef.current;
     const titleEl = titleRef.current;
-    if (!section || !strip || !fill || !indexEl || !titleEl) return;
+    if (!section || !fill || !indexEl || !titleEl) return;
 
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) return;
 
     const panels = Array.from(
-      strip.querySelectorAll<HTMLElement>("[data-step]"),
+      section.querySelectorAll<HTMLElement>("[data-step]"),
     );
     const ticks = Array.from(
       section.querySelectorAll<HTMLElement>("[data-tick]"),
@@ -50,27 +47,22 @@ export function HowWeWork() {
       const r = section.getBoundingClientRect();
       const total = r.height - window.innerHeight;
       const p = total > 0 ? clamp01(-r.top / total) : 0;
-
-      // Travel in exact stage widths so only one slide fills the clip
-      const stage = (strip.parentElement?.clientWidth || strip.clientWidth || window.innerWidth);
-      const x = stage * p * (n - 1);
-      strip.style.transform = `translate3d(${-x}px, 0, 0)`;
       fill.style.transform = `scaleX(${p})`;
 
       const active = Math.min(n - 1, Math.round(p * (n - 1)));
-      if (active !== lastActive) {
-        lastActive = active;
-        panels.forEach((el, i) => {
-          if (i === active) el.setAttribute("data-active", "");
-          else el.removeAttribute("data-active");
-        });
-        ticks.forEach((el, i) => {
-          if (i === active) el.setAttribute("data-active", "");
-          else el.removeAttribute("data-active");
-        });
-        indexEl.textContent = `${PROCESS[active]?.step ?? "01"} / 0${n}`;
-        titleEl.textContent = PROCESS[active]?.title ?? "";
-      }
+      if (active === lastActive) return;
+      lastActive = active;
+
+      panels.forEach((el, i) => {
+        if (i === active) el.setAttribute("data-active", "");
+        else el.removeAttribute("data-active");
+      });
+      ticks.forEach((el, i) => {
+        if (i === active) el.setAttribute("data-active", "");
+        else el.removeAttribute("data-active");
+      });
+      indexEl.textContent = `${PROCESS[active]?.step ?? "01"} / 0${n}`;
+      titleEl.textContent = PROCESS[active]?.title ?? "";
     };
 
     const frame = () => {
@@ -85,7 +77,6 @@ export function HowWeWork() {
     const onMq = () => {
       if (!mq.matches) return;
       cancelAnimationFrame(raf);
-      strip.style.transform = "";
       fill.style.transform = "scaleX(0)";
       panels.forEach((el) => el.removeAttribute("data-active"));
       ticks.forEach((el) => el.removeAttribute("data-active"));
@@ -121,32 +112,28 @@ export function HowWeWork() {
             Four steps, no theater
           </h2>
           <p className={styles.lead}>
-            One frame at a time — from first conversation to a site that keeps
-            earning its keep.
+            Scroll to advance — one full step at a time.
           </p>
         </header>
 
-        <div className={styles.viewport}>
-          <div ref={stripRef} className={styles.strip}>
-            {PROCESS.map((step, i) => (
-              <article
-                key={step.step}
-                data-step
-                data-active={i === 0 ? "" : undefined}
-                className={styles.slide}
-                style={{ ["--i" as string]: String(i) }}
-              >
-                <span className={styles.watermark} aria-hidden="true">
-                  {step.step}
-                </span>
-                <div className={styles.slideBody}>
-                  <span className={styles.stepNum}>{step.step}</span>
-                  <h3 className={styles.stepTitle}>{step.title}</h3>
-                  <p className={styles.stepBody}>{step.body}</p>
-                </div>
-              </article>
-            ))}
-          </div>
+        <div className={styles.stage}>
+          {PROCESS.map((step, i) => (
+            <article
+              key={step.step}
+              data-step
+              data-active={i === 0 ? "" : undefined}
+              className={styles.slide}
+            >
+              <span className={styles.watermark} aria-hidden="true">
+                {step.step}
+              </span>
+              <div className={styles.slideBody}>
+                <span className={styles.stepNum}>{step.step}</span>
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepBody}>{step.body}</p>
+              </div>
+            </article>
+          ))}
         </div>
 
         <div className={styles.progress} aria-hidden="true">

@@ -1,18 +1,17 @@
-/* Full-viewport sticky step film — exactly one slide fills the stage.
-   No card grid, no side peeks, no equal 4-up cells. */
+/* Vertical sticky film: stacked absolute slides — only one visible.
+   Never a horizontal 4-up card strip. */
 
 .section {
   position: relative;
   height: 420vh;
-  background: #161719;
   color: var(--mist);
+  background: #161719;
   border-bottom: 1px solid var(--rule);
 }
 
 .pin {
   position: sticky;
   top: 0;
-  height: 100vh;
   height: 100svh;
   display: grid;
   grid-template-rows: auto 1fr auto;
@@ -30,8 +29,8 @@
 
 .labelRow {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
+  align-items: baseline;
   gap: 12px;
   margin-bottom: clamp(6px, 1vh, 12px);
 }
@@ -48,93 +47,81 @@
   font: 400 calc(13 * var(--u)) / 1 var(--mono);
   letter-spacing: -0.04em;
   color: #0077e6;
-  min-width: 5ch;
   text-align: right;
+  min-width: 5ch;
 }
 
 .title {
   margin: 0;
   font-size: clamp(1.5rem, 3.2vw, 2.25rem);
   font-weight: 600;
-  line-height: 1.05;
   letter-spacing: -0.04em;
+  line-height: 1.05;
   color: var(--ink);
 }
 
 .lead {
-  margin: 8px 0 0;
   max-width: 42ch;
+  margin: 8px 0 0;
   font-size: calc(15 * var(--u));
-  line-height: 1.4;
   letter-spacing: -0.02em;
+  line-height: 1.4;
   color: var(--ink-dim);
 }
 
-/* Stage clips hard — only the active slide is visible */
-.viewport {
+.stage {
   position: relative;
-  overflow: hidden;
-  min-height: 0;
   width: 100%;
-  container-type: inline-size;
-  container-name: how-film;
+  min-height: 0;
+  overflow: hidden;
   border-block: 1px solid var(--rule);
   background:
-    radial-gradient(
-      60% 80% at 12% 100%,
-      rgba(0, 119, 230, 0.12),
-      transparent 55%
-    ),
+    radial-gradient(60% 80% at 12% 100%, #0077e61f, #0000 55%),
     #121316;
 }
 
-.strip {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: stretch;
-  height: 100%;
-  width: 100%;
-  gap: 0;
-  padding: 0;
-  will-change: transform;
-}
-
-/* Exactly one full stage wide — never card-sized cells */
 .slide {
-  --i: 0;
-  position: relative;
-  flex: 0 0 100%;
-  flex: 0 0 100cqi;
-  width: 100%;
-  width: 100cqi;
-  min-width: 100%;
-  min-width: 100cqi;
-  min-height: 0;
+  position: absolute;
+  inset: 0;
   display: grid;
   align-content: center;
   justify-items: start;
   padding: clamp(28px, 6vh, 72px) var(--gutter);
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  overflow: hidden;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition:
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out),
+    visibility 0s linear 0.45s;
+}
+
+.slide[data-active] {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity 0.45s var(--ease-out),
+    transform 0.45s var(--ease-out),
+    visibility 0s;
 }
 
 .watermark {
   position: absolute;
-  right: max(2%, var(--gutter));
   top: 50%;
+  right: max(2%, var(--gutter));
   translate: 0 -50%;
-  font: 600 clamp(8rem, 28cqi, 18rem) / 0.85 var(--display);
+  font: 600 clamp(8rem, 28vw, 18rem) / 0.85 var(--display);
   letter-spacing: -0.06em;
-  color: rgba(255, 255, 255, 0.04);
+  color: #ffffff0a;
   pointer-events: none;
   user-select: none;
 }
 
 .slide[data-active] .watermark {
-  color: rgba(0, 119, 230, 0.16);
+  color: #0077e629;
 }
 
 .slideBody {
@@ -142,39 +129,40 @@
   z-index: 1;
   max-width: min(36ch, 90%);
   padding-left: 18px;
-  border-left: 3px solid rgba(255, 255, 255, 0.18);
-  box-shadow: none;
-  transition: border-left-color 0.35s var(--ease-out), box-shadow 0.35s var(--ease-out);
+  border-left: 3px solid #ffffff2e;
+  transition:
+    border-left-color 0.35s var(--ease-out),
+    box-shadow 0.35s var(--ease-out);
 }
 
 .slide[data-active] .slideBody {
   border-left-color: #0077e6;
-  box-shadow: -1px 0 18px rgba(0, 119, 230, 0.35);
+  box-shadow: -1px 0 18px #0077e659;
 }
 
 .stepNum {
   display: block;
+  margin-bottom: clamp(12px, 2vh, 24px);
   font-family: var(--mono);
   font-size: calc(13 * var(--u));
   letter-spacing: -0.04em;
   color: #0077e6;
-  margin-bottom: clamp(12px, 2vh, 24px);
 }
 
 .stepTitle {
   margin: 0;
-  font-size: clamp(2.4rem, 7cqi, 4.5rem);
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
   font-weight: 600;
-  line-height: 1.02;
   letter-spacing: -0.045em;
+  line-height: 1.02;
   color: var(--ink);
 }
 
 .stepBody {
   margin: clamp(12px, 1.8vh, 22px) 0 0;
   font-size: clamp(1rem, calc(18 * var(--u)), 1.2rem);
-  line-height: 1.5;
   letter-spacing: -0.015em;
+  line-height: 1.5;
   color: var(--ink-dim);
 }
 
@@ -186,42 +174,42 @@
 
 .track {
   height: 2px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
   overflow: hidden;
+  border-radius: 2px;
+  background: #ffffff1a;
 }
 
 .fill {
-  height: 100%;
   width: 100%;
-  transform-origin: left center;
+  height: 100%;
   transform: scaleX(0);
+  transform-origin: 0;
   background: #0077e6;
   will-change: transform;
 }
 
 .scrubMeta {
   display: flex;
-  align-items: center;
   justify-content: space-between;
+  align-items: center;
   gap: 16px;
   margin-top: 12px;
 }
 
 .ticks {
-  list-style: none;
-  margin: 0;
-  padding: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 .ticks li {
   width: 28px;
   height: 3px;
   border-radius: 2px;
-  background: rgba(255, 255, 255, 0.18);
+  background: #ffffff2e;
   transition:
     background 0.35s var(--ease-out),
     width 0.35s var(--ease-out);
@@ -244,33 +232,25 @@
   .section {
     height: 380vh;
   }
-
   .chrome,
-  .progress {
-    padding-inline: 16px;
-  }
-
+  .progress,
   .slide {
     padding-inline: 16px;
   }
-
   .lead {
     max-width: none;
     font-size: 14px;
   }
-
   .stepTitle {
     font-size: clamp(2rem, 11vw, 3rem);
   }
 }
 
-/* Reduced motion: stacked full-width steps — still not a 4-up grid */
 @media (prefers-reduced-motion: reduce) {
   .section {
     height: auto;
     padding-block: var(--section-y);
   }
-
   .pin {
     position: relative;
     height: auto;
@@ -278,55 +258,35 @@
     padding: 0;
     overflow: visible;
   }
-
   .chrome,
   .progress {
     width: min(1280px, 100%);
     margin-inline: auto;
     padding-inline: var(--gutter);
   }
-
   .liveIndex {
     display: none;
   }
-
-  .viewport {
+  .stage {
     margin-top: calc(40 * var(--u));
-    overflow: visible;
     border-block: 0;
     background: transparent;
+    overflow: visible;
   }
-
-  .strip {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-    height: auto;
-    width: 100%;
-    transform: none !important;
-    will-change: auto;
-  }
-
   .slide {
-    flex: none;
-    width: 100%;
-    min-width: 0;
-    min-height: min(70vh, 560px);
+    position: relative;
+    inset: auto;
     opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transform: none;
+    transition: none;
+    min-height: min(50vh, 420px);
     border-bottom: 1px solid var(--rule);
     background:
-      radial-gradient(
-        50% 70% at 0% 100%,
-        rgba(0, 119, 230, 0.08),
-        transparent 60%
-      ),
+      radial-gradient(50% 70% at 0 100%, #0077e614, #0000 60%),
       #121316;
   }
-
-  .watermark {
-    font-size: clamp(5rem, 28vw, 9rem);
-  }
-
   .progress .track,
   .fill,
   .scrubMeta {
