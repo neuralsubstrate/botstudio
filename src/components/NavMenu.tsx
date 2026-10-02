@@ -603,7 +603,7 @@ export function NavMenu() {
               data-active={active ? "true" : "false"}
               style={{ "--side": side, "--dir": dir } as CSSProperties}
               aria-hidden={!active}
-              {...(!active ? ({ inert: "" } as Record<string, string>) : {})}
+              inert={!active}
             >
               <MenuPanel
                 menu={m}

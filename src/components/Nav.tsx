@@ -150,81 +150,103 @@ export function Nav() {
         aria-hidden="true"
       />
 
+      {/* Stack sits outside <header> so backdrop-filter cannot clip it. */}
       <div
-        id={drawerId}
-        className={styles.drawer}
+        className={styles.drawerStack}
         data-open={open ? "true" : "false"}
-        role="dialog"
-        aria-modal="true"
-        aria-label="Mobile navigation"
         aria-hidden={!open}
       >
-        <div className={styles.drawerInner}>
-          <div className={styles.drawerGroup}>
-            <button
-              type="button"
-              className={styles.drawerAccordion}
-              aria-expanded={drawerCapsOpen}
-              aria-controls={drawerCapsMenuId}
-              onClick={() => setDrawerCapsOpen((v) => !v)}
-            >
-              Capabilities
-              <svg
-                className={styles.drawerChevron}
-                width="12"
-                height="12"
-                viewBox="0 0 10 10"
-                fill="none"
-                aria-hidden="true"
+        <div
+          className={`${styles.drawerLayer} ${styles.drawerLayer2}`}
+          aria-hidden="true"
+        />
+        <div
+          className={`${styles.drawerLayer} ${styles.drawerLayer1}`}
+          aria-hidden="true"
+        />
+        <div
+          id={drawerId}
+          className={styles.drawer}
+          data-open={open ? "true" : "false"}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Mobile navigation"
+        >
+          <div className={styles.drawerInner}>
+            <div className={styles.drawerGroup}>
+              <button
+                type="button"
+                className={`${styles.drawerAccordion} ${styles.drawerParent}`}
+                aria-expanded={drawerCapsOpen}
+                aria-controls={drawerCapsMenuId}
+                onClick={() => setDrawerCapsOpen((v) => !v)}
               >
-                <path
-                  d="M2.5 3.75 5 6.25 7.5 3.75"
-                  stroke="currentColor"
-                  strokeWidth="1.25"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
-            <div
-              id={drawerCapsMenuId}
-              className={styles.drawerNested}
-              data-open={drawerCapsOpen ? "true" : "false"}
-              hidden={!drawerCapsOpen}
-            >
-              {CAPABILITIES.map((cap) => (
+                Capabilities
+                <svg
+                  className={styles.drawerChevron}
+                  width="12"
+                  height="12"
+                  viewBox="0 0 10 10"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2.5 3.75 5 6.25 7.5 3.75"
+                    stroke="currentColor"
+                    strokeWidth="1.25"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </button>
+              <div
+                id={drawerCapsMenuId}
+                className={styles.drawerNested}
+                data-open={drawerCapsOpen ? "true" : "false"}
+                hidden={!drawerCapsOpen}
+              >
+                {CAPABILITIES.map((cap) => (
+                  <Link
+                    key={cap.slug}
+                    href={`/capabilities#${cap.slug}`}
+                    onClick={close}
+                  >
+                    <span>{cap.title}</span>
+                    <span className={`mono ${styles.drawerCode}`}>
+                      {cap.index}
+                    </span>
+                  </Link>
+                ))}
                 <Link
-                  key={cap.slug}
-                  href={`/capabilities#${cap.slug}`}
+                  href="/capabilities"
+                  className={styles.drawerAll}
                   onClick={close}
                 >
-                  <span>{cap.title}</span>
-                  <span className={`mono ${styles.drawerCode}`}>{cap.index}</span>
+                  View all capabilities
                 </Link>
-              ))}
+              </div>
+            </div>
+
+            {DRAWER_LINKS.map((item) => (
               <Link
-                href="/capabilities"
-                className={styles.drawerAll}
+                key={item.href + item.label}
+                href={item.href}
                 onClick={close}
               >
-                View all capabilities
+                {item.label}
               </Link>
+            ))}
+
+            <div className={styles.drawerAuth}>
+              <a
+                className={`${styles.drawerCta} ${styles.drawerCtaPrimary}`}
+                href={`mailto:${SITE.email}`}
+                onClick={close}
+              >
+                Let&apos;s chat
+              </a>
             </div>
           </div>
-
-          {DRAWER_LINKS.map((item) => (
-            <Link key={item.href + item.label} href={item.href} onClick={close}>
-              {item.label}
-            </Link>
-          ))}
-
-          <a
-            className={styles.drawerCta}
-            href={`mailto:${SITE.email}`}
-            onClick={close}
-          >
-            Let&apos;s chat
-          </a>
         </div>
       </div>
     </>

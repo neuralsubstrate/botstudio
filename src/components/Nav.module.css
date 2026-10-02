@@ -10,16 +10,25 @@
   background: transparent;
   border-bottom: 1px solid transparent;
   transition:
-    background-color 0.3s var(--ease-out),
-    border-color 0.3s var(--ease-out),
-    backdrop-filter 0.3s var(--ease-out);
+    background-color 300ms ease,
+    border-color 300ms ease,
+    backdrop-filter 300ms ease,
+    -webkit-backdrop-filter 300ms ease;
 }
 
-.nav[data-scrolled="true"],
-.nav[data-open="true"] {
+/* Glass after scroll (botsign: void/75 + blur-md). Keep --nav-h — no shrink. */
+.nav[data-scrolled="true"] {
   background: rgba(0, 0, 0, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Solid when mobile drawer is open (botsign: bg-void, no blur). */
+.nav[data-open="true"] {
+  background: #000000;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 
@@ -99,6 +108,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.megaMenu {
+  width: 100%;
 }
 
 .link {
@@ -523,12 +536,13 @@
 .scrim {
   position: fixed;
   inset: 0;
-  z-index: 60;
-  background: rgba(0, 0, 0, 0.45);
+  z-index: 55;
+  background: rgba(8, 9, 10, 0.55);
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  transition: opacity 240ms ease, visibility 240ms ease;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .scrim[data-open="true"] {
@@ -537,69 +551,205 @@
   pointer-events: auto;
 }
 
-.drawer {
+/*
+  Right slide drawer (~⅔ width) with soft card-stack layers.
+  Rendered as siblings of <header> so backdrop-filter cannot clip fixed children.
+  Header stays above (z-70) so the hamburger/X remains clickable.
+*/
+.drawerStack {
   position: fixed;
   top: 0;
   right: 0;
+  left: auto;
   bottom: 0;
-  z-index: 65;
-  width: min(20rem, 78vw);
-  background: #0a0a0b;
-  border-left: 1px solid rgba(255, 255, 255, 0.06);
-  padding: calc(var(--nav-h) + 12px) 14px 28px;
-  transform: translateX(108%);
-  visibility: hidden;
+  width: min(20rem, 72vw);
+  max-width: 100%;
+  z-index: 60;
   pointer-events: none;
-  overflow-y: auto;
+  visibility: hidden;
+  overflow: hidden;
+  transform: translate3d(100%, 0, 0);
   transition:
-    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1),
-    visibility 0.32s;
+    transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    visibility 320ms;
 }
 
-.drawer[data-open="true"] {
-  transform: translateX(0);
-  visibility: visible;
+.drawerStack[data-open="true"] {
   pointer-events: auto;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+  overflow: visible;
+}
+
+.drawerLayer,
+.drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: auto;
+  bottom: 0;
+  width: 100%;
+  border-radius: 12px 0 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: none;
+  transform: none;
+  opacity: 0;
+  transition:
+    transform 320ms cubic-bezier(0.32, 0.72, 0, 1),
+    opacity 240ms ease;
+}
+
+.drawerLayer {
+  pointer-events: none;
+  z-index: 0;
+}
+
+.drawerLayer2 {
+  background: #12141a;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.drawerLayer1 {
+  z-index: 1;
+  background: #0c0d10;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.drawer {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  background:
+    radial-gradient(circle at 10% 0%, rgba(0, 119, 230, 0.09), transparent 34%),
+    #0a0a0b;
+  box-shadow:
+    -12px 0 48px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  padding: calc(var(--nav-h) + 12px) 14px 28px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  height: 100%;
+  min-height: 100%;
+}
+
+.drawerStack[data-open="true"] .drawerLayer2 {
+  transform: translateX(-14px) rotate(2.2deg) scale(0.965);
+  opacity: 0.55;
+  transition-delay: 55ms;
+}
+
+.drawerStack[data-open="true"] .drawerLayer1 {
+  transform: translateX(-7px) rotate(1.1deg) scale(0.985);
+  opacity: 0.8;
+  transition-delay: 95ms;
+}
+
+.drawerStack[data-open="true"] .drawer {
+  transform: translateX(0) rotate(0) scale(1);
+  opacity: 1;
+  transition-delay: 0ms;
 }
 
 .drawerInner {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 2px;
+  flex: 1 1 auto;
+  min-height: 100%;
+}
+
+/* Staggered "card" settle for menu rows */
+.drawerInner > * {
+  opacity: 0;
+  transform: translateX(10px);
+  transition:
+    opacity 220ms ease,
+    transform 260ms cubic-bezier(0.32, 0.72, 0, 1),
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.drawerStack[data-open="true"] .drawerInner > * {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(1) {
+  transition-delay: 110ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(2) {
+  transition-delay: 145ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(3) {
+  transition-delay: 175ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(4) {
+  transition-delay: 200ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(5) {
+  transition-delay: 225ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(6) {
+  transition-delay: 250ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(7) {
+  transition-delay: 270ms;
+}
+.drawerStack[data-open="true"] .drawerInner > *:nth-child(8) {
+  transition-delay: 290ms;
 }
 
 .drawerInner > a {
   display: flex;
   align-items: center;
   min-height: 44px;
-  padding: 10px 12px;
+  padding: 11px 12px;
   border-radius: 10px;
   font-family: var(--mono);
   font-size: calc(14 * var(--u));
   letter-spacing: -0.04em;
   text-transform: uppercase;
   color: var(--ink-dim);
-  transition: color 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .drawerInner > a:hover {
   color: var(--ink);
   background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
+}
+
+.drawerInner > a:focus-visible {
+  outline: none;
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 .drawerGroup {
   display: flex;
   flex-direction: column;
   gap: 2px;
+  margin-bottom: 2px;
+}
+
+.drawerParent {
+  color: var(--ink) !important;
 }
 
 .drawerAccordion {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
   width: 100%;
   min-height: 44px;
-  padding: 10px 12px;
+  padding: 11px 12px;
   border: 0;
   border-radius: 10px;
   background: transparent;
@@ -607,24 +757,29 @@
   font-size: calc(14 * var(--u));
   letter-spacing: -0.04em;
   text-transform: uppercase;
-  color: var(--ink-dim);
+  color: var(--ink);
   cursor: pointer;
-  transition: color 0.15s ease, background 0.15s ease;
+  text-align: left;
+  transition:
+    background 160ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .drawerAccordion:hover {
-  color: var(--ink);
   background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
 }
 
 .drawerAccordion:focus-visible {
   outline: none;
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.04);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.14);
 }
 
 .drawerChevron {
+  flex-shrink: 0;
   opacity: 0.7;
-  transition: transform 280ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: transform 180ms ease;
 }
 
 .drawerAccordion[aria-expanded="true"] .drawerChevron {
@@ -634,8 +789,10 @@
 .drawerNested {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   padding: 2px 0 6px 8px;
+  margin: 0 0 4px 4px;
+  border-left: 1px solid #23252a;
 }
 
 .drawerNested[hidden],
@@ -646,7 +803,8 @@
 .drawerNested a {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 10px;
   min-height: 40px;
   padding: 8px 12px;
   border-radius: 10px;
@@ -655,35 +813,78 @@
   letter-spacing: -0.01em;
   text-transform: none;
   color: var(--ink-dim);
-  transition: color 0.15s ease, background 0.15s ease;
+  text-decoration: none;
+  transition:
+    color 160ms ease,
+    background 160ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .drawerNested a:hover {
   color: var(--ink);
   background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
 }
 
 .drawerCode {
   margin-left: auto;
+  flex-shrink: 0;
   font-size: calc(11 * var(--u));
   color: var(--ink-muted);
 }
 
 .drawerAll {
-  color: var(--ink) !important;
+  color: var(--ink-dim) !important;
+  font-size: calc(13 * var(--u)) !important;
   font-weight: 510;
 }
 
+.drawerAuth {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  padding-top: 18px;
+  padding-bottom: 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .drawerCta {
-  margin-top: 12px;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  background: var(--accent) !important;
-  color: #fff !important;
-  border: 1px solid transparent;
+  min-height: 44px;
+  padding: 11px 12px;
+  border-radius: 10px;
+  font-family: var(--mono);
+  font-size: calc(14 * var(--u));
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  font-weight: 510;
+  text-decoration: none;
+  color: var(--ink) !important;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition:
+    background 160ms ease,
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 .drawerCta:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  transform: translateY(-1.5px) !important;
+}
+
+.drawerCtaPrimary {
+  color: #fff !important;
+  background: var(--accent) !important;
+  border: 1px solid transparent !important;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08) inset;
+}
+
+.drawerCtaPrimary:hover {
   background: #0066c7 !important;
+  color: #fff !important;
 }
 
 @media (max-width: 900px) {
@@ -700,6 +901,13 @@
   }
 }
 
+@media (min-width: 901px) {
+  .drawerStack,
+  .scrim {
+    display: none !important;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nav,
   .hoverPill,
@@ -708,16 +916,47 @@
   .chev,
   .toggle,
   .scrim,
+  .drawerStack,
+  .drawerLayer,
   .drawer,
+  .drawerInner > *,
   .viewport,
   .viewport[data-moving="true"],
   .panel,
   .drawerChevron {
     transition: none !important;
+    transition-delay: 0ms !important;
+  }
+
+  .drawerLayer,
+  .drawer {
+    transform: none;
+    opacity: 0;
+  }
+
+  .drawerStack[data-open="true"] .drawerLayer2,
+  .drawerStack[data-open="true"] .drawerLayer1,
+  .drawerStack[data-open="true"] .drawer {
+    transform: none;
+    opacity: 1;
+  }
+
+  .drawerInner > * {
+    opacity: 1;
+    transform: none;
   }
 
   .pvSwap,
   .pvSwap > ol > li {
     animation: none;
+  }
+
+  .logo:hover,
+  .toggle:hover,
+  .drawerInner > a:hover,
+  .drawerAccordion:hover,
+  .drawerNested a:hover,
+  .drawerCta:hover {
+    transform: none !important;
   }
 }
