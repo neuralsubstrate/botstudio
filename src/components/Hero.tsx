@@ -34,9 +34,16 @@ export function Hero() {
     return () => window.clearInterval(id);
   }, [reduceMotion, paused]);
 
+  const heroClass = [
+    styles.hero,
+    paused || reduceMotion ? styles.paused : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <section
-      className={styles.hero}
+      className={heroClass}
       aria-labelledby="hero-title"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -51,7 +58,13 @@ export function Hero() {
             priority={i === 0}
             loading={i === 0 ? "eager" : "lazy"}
             sizes="100vw"
-            className={`${styles.image} ${i === active ? styles.imageActive : ""}`}
+            className={[
+              styles.image,
+              i === active ? styles.imageActive : "",
+              !reduceMotion ? styles.imageBreathe : "",
+            ]
+              .filter(Boolean)
+              .join(" ")}
           />
         ))}
         <div className={styles.scrim} />
@@ -60,42 +73,48 @@ export function Hero() {
       </div>
 
       <div className={`shell ${styles.inner}`}>
-        <div className={styles.copy}>
-          <div className={styles.meta}>
-            <span className="kicker">{"// 00.01°"}</span>
-            <span className="kicker">{SITE.location}</span>
-          </div>
-
-          <p className={styles.eyebrow}>Ultra-premium websites</p>
-
-          <h1 id="hero-title" className={styles.title}>
-            that connect, scale
-            <br />
-            <span>and perform.</span>
-          </h1>
-
-          <p className={styles.brand}>
-            {SITE.name}
-          </p>
-
-          <p className={styles.lede}>
-            A design studio for brands that want sites people remember —
-            calm systems, sharp craft, and engineering that holds after launch.
-          </p>
-
-          <div className={styles.ctas}>
-            <a className="btn btn-primary" href="#craft">
-              See work
-            </a>
-            <a className="btn btn-ghost" href="#contact">
-              Let&apos;s chat
-            </a>
-          </div>
-        </div>
-
-        <div className={styles.coords} aria-hidden="true">
+        <aside className={styles.rail} aria-hidden="true">
+          <span className="mono">{"// 00.01°"}</span>
           <span className="mono">{"// 00.02°"}</span>
-          <span className="mono">N 44.8° · W 106.9°</span>
+          <span className="mono">{"// 00.03°"}</span>
+          <span className="mono">{"// 00.04°"}</span>
+        </aside>
+
+        <div className={styles.copy}>
+          <div className={`${styles.glass} ${styles.glassHeadline}`}>
+            <p className={styles.eyebrow}>Ultra-premium websites</p>
+            <h1 id="hero-title" className={styles.title}>
+              that connect, scale
+              <br />
+              <span>and perform.</span>
+            </h1>
+          </div>
+
+          <p className={`${styles.glass} ${styles.glassBrand}`} aria-label={SITE.name}>
+            <span className={styles.brandAccent}>Botlane</span>
+            <span className={styles.brandRest}>\Studios</span>
+          </p>
+
+          <div className={`${styles.glass} ${styles.glassBody}`}>
+            <p className={styles.lede}>
+              A design studio for brands that want sites people remember —
+              calm systems, sharp craft, and engineering that holds after launch.
+            </p>
+            <p className={styles.metaLine}>
+              <span className="mono">{SITE.location}</span>
+              <span className="mono" aria-hidden="true">
+                N 44.8° · W 106.9°
+              </span>
+            </p>
+            <div className={styles.ctas}>
+              <a className="btn btn-primary" href="#craft">
+                See work
+              </a>
+              <a className={`btn ${styles.btnChat}`} href="#contact">
+                Let&apos;s chat
+              </a>
+            </div>
+          </div>
         </div>
       </div>
     </section>
