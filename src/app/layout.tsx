@@ -29,13 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" data-theme="light" className={`${figtree.variable} h-full antialiased`}>
+    <html lang="en" className={`${figtree.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col">
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){try{var t=localStorage.getItem("botstudio-theme");var m=document.cookie.match(/(?:^|; )botstudio-theme=(light|dark)/);document.documentElement.dataset.theme=(m&&m[1]==="dark")?"dark":"light";}catch(e){}})();`,
-          }}
-        />
         <SmoothScroll />
         <Nav />
         <main>{children}</main>

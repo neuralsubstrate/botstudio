@@ -14,14 +14,16 @@ const SLIDES = [
 const ROTATION_MS = 6000;
 
 const TICKS = [
-  { label: "// 00.01°", y: 102 },
-  { label: "// 00.02°", y: 248 },
-  { label: "// 00.03°", y: 383 },
-  { label: "// 00.04°", y: 597 },
+  { label: "// 00.01°", y: 90 },
+  { label: "// 00.02°", y: 220 },
+  { label: "// 00.03°", y: 350 },
+  { label: "// 00.04°", y: 540 },
 ] as const;
 
 const HEADLINE =
   "Digital experiences that connect, scale and perform".split(" ");
+
+type HeroTheme = "dark" | "light";
 
 /**
  * Honest hero aligned to botlane.tech / bot-studio:
@@ -29,11 +31,13 @@ const HEADLINE =
  * soft scrims on headline + lockup, side ticks, mono message lines,
  * Sheridan time, craft/chat CTAs, showreel plate on the right.
  * Keeps botstudio rotating images, particle dots, and breathe.
+ * Hero-only light/dark treatment (in-session; does not theme the rest of the site).
  */
 export function Hero() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
   const [reduceMotion, setReduceMotion] = useState(false);
+  const [heroTheme, setHeroTheme] = useState<HeroTheme>("dark");
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -58,9 +62,12 @@ export function Hero() {
     .filter(Boolean)
     .join(" ");
 
+  const nextTheme: HeroTheme = heroTheme === "dark" ? "light" : "dark";
+
   return (
     <section
       className={heroClass}
+      data-hero-theme={heroTheme}
       aria-label="Botlane Studios"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
@@ -89,6 +96,23 @@ export function Hero() {
       </div>
 
       <div className={styles.stage}>
+        <button
+          type="button"
+          className={styles.themeToggle}
+          onClick={() => setHeroTheme(nextTheme)}
+          aria-pressed={heroTheme === "light"}
+          aria-label={
+            nextTheme === "light"
+              ? "Switch hero to light treatment"
+              : "Switch hero to dark treatment"
+          }
+        >
+          <span className={styles.themeIcon} aria-hidden="true">
+            {nextTheme === "light" ? "☀" : "☾"}
+          </span>
+          <span className={styles.themeLabel}>{nextTheme}</span>
+        </button>
+
         {TICKS.map((tick) => (
           <div
             key={tick.label}
