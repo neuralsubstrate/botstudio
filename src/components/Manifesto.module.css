@@ -1,23 +1,183 @@
-.strip {
-  background: var(--bg);
-  border-bottom: 1px solid var(--rule);
-  padding-block: calc(100 * var(--u));
+/* Scroll track: extra height is how far the visitor scrolls to bloom each
+   line in turn. Sticky stage stays on screen while they do. Dark film so it
+   sits cleanly after ProcessFilm (#161719). Lenis drives native scroll, so
+   sticky + getBoundingClientRect progress stays in sync. */
+.section {
+  position: relative;
+  height: 360vh;
+  background: #161719;
+  color: var(--mist);
 }
 
-.inner {
+.pin {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100svh;
   display: grid;
-  gap: calc(8 * var(--u));
+  align-items: center;
+  overflow: hidden;
 }
 
-.inner p {
+.labelRow {
+  position: absolute;
+  z-index: 2;
+  top: calc(var(--nav-h) + 24 * var(--u));
+  left: 0;
+  right: 0;
+  width: calc(1280 * var(--u));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 calc(20 * var(--u));
+  pointer-events: none;
+}
+
+.label {
+  font: 400 calc(12 * var(--u)) / 1 var(--mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.55;
+  color: var(--mist);
+}
+
+.stage {
+  position: relative;
+  z-index: 1;
+  width: calc(1280 * var(--u));
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 calc(20 * var(--u));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(0.2rem, 1.4vh, 1.1rem);
+}
+
+/* Soft orb behind the blooming line — mist normally, accent when "we create". */
+.glow {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: min(42vh, 420px);
+  transform: translateY(0);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(208, 214, 224, 0.22) 0%,
+    rgba(208, 214, 224, 0.06) 42%,
+    transparent 70%
+  );
+  pointer-events: none;
+  opacity: 0.4;
+  transition: background 0.45s var(--ease-out);
+  will-change: transform, opacity;
+}
+
+.glow[data-accent] {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(0, 119, 230, 0.38) 0%,
+    rgba(0, 119, 230, 0.1) 42%,
+    transparent 70%
+  );
+}
+
+.line {
+  --bloom: 0;
+  position: relative;
+  z-index: 1;
   margin: 0;
-  font-size: clamp(2rem, calc(72 * var(--u)), 4.5rem);
+  font-size: clamp(2.4rem, 7.2vw, 6.25rem);
   font-weight: 600;
-  line-height: 1;
-  letter-spacing: -0.04em;
-  color: var(--ink);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  color: var(--mist);
+  opacity: calc(0.12 + var(--bloom) * 0.88);
+  transform: scale(calc(0.94 + var(--bloom) * 0.08));
+  transform-origin: left center;
+  filter: blur(calc((1 - var(--bloom)) * 1.15px));
+  text-shadow:
+    0 0 calc(var(--bloom) * 42px) rgba(208, 214, 224, calc(var(--bloom) * 0.4)),
+    0 0 calc(var(--bloom) * 18px) rgba(255, 255, 255, calc(var(--bloom) * 0.22));
+  will-change: opacity, transform, filter;
 }
 
+/* "we create" — accent bloom when active; dimmed blue mist when not. */
 .accent {
-  color: var(--accent) !important;
+  color: #0077e6;
+  text-shadow:
+    0 0 calc(var(--bloom) * 56px) rgba(0, 119, 230, calc(var(--bloom) * 0.65)),
+    0 0 calc(var(--bloom) * 24px) rgba(0, 119, 230, calc(var(--bloom) * 0.4)),
+    0 0 calc(var(--bloom) * 8px) rgba(255, 255, 255, calc(var(--bloom) * 0.15));
+}
+
+.line[data-active] {
+  z-index: 2;
+}
+
+@media (max-width: 899px) {
+  .section {
+    height: 300vh;
+  }
+
+  .labelRow,
+  .stage {
+    padding-inline: 16px;
+  }
+
+  .label {
+    font-size: 11px;
+  }
+
+  .line {
+    font-size: clamp(2rem, 11vw, 3.5rem);
+  }
+
+  .glow {
+    left: 0;
+    right: 0;
+  }
+}
+
+/* prefers-reduced-motion: static stack, no pin, no blur bloom. */
+@media (prefers-reduced-motion: reduce) {
+  .section {
+    height: auto;
+  }
+
+  .pin {
+    position: relative;
+    height: auto;
+    min-height: unset;
+    padding-block: calc(100 * var(--u));
+    display: block;
+  }
+
+  .labelRow {
+    position: relative;
+    top: auto;
+    margin-bottom: calc(32 * var(--u));
+  }
+
+  .glow {
+    display: none;
+  }
+
+  .line {
+    opacity: 0.5;
+    transform: none;
+    filter: none;
+    text-shadow: none;
+    will-change: auto;
+  }
+
+  .accent {
+    opacity: 1;
+    text-shadow: 0 0 28px rgba(0, 119, 230, 0.35);
+  }
+
+  .stage {
+    gap: calc(10 * var(--u));
+  }
 }
