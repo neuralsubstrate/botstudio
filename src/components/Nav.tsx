@@ -1,31 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import {
-  useCallback,
-  useEffect,
-  useId,
-  useRef,
-  useState,
-  type CSSProperties,
-} from "react";
-import { NAV, SITE } from "@/lib/content";
+import { useCallback, useEffect, useId, useRef, useState } from "react";
+import { CAPABILITIES, SITE } from "@/lib/content";
+import { NavMenu } from "./NavMenu";
 import { StudiosMark } from "./StudiosLogo";
 import styles from "./Nav.module.css";
 
 const BREAKPOINT = 900;
 
+const DRAWER_LINKS = [
+  { href: "/", label: "Studio" },
+  { href: "/#craft", label: "Craft" },
+  { href: "/#process", label: "How we work" },
+  { href: "/about", label: "About" },
+  { href: "/pricing", label: "Pricing" },
+  { href: "/#contact", label: "Contact" },
+] as const;
+
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [hoverBox, setHoverBox] = useState<{ x: number; w: number } | null>(
-    null,
-  );
+  const [drawerCapsOpen, setDrawerCapsOpen] = useState(false);
   const toggleRef = useRef<HTMLButtonElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
   const drawerId = useId();
+  const drawerCapsMenuId = useId();
 
-  const close = useCallback(() => setOpen(false), []);
+  const close = useCallback(() => {
+    setOpen(false);
+    setDrawerCapsOpen(false);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -39,6 +43,7 @@ export function Nav() {
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setOpen(false);
+        setDrawerCapsOpen(false);
         toggleRef.current?.focus();
       }
     };
@@ -55,20 +60,13 @@ export function Nav() {
     const onChange = () => {
       if (mq.matches) {
         setOpen(false);
+        setDrawerCapsOpen(false);
         document.body.style.overflow = "";
       }
     };
     mq.addEventListener("change", onChange);
     return () => mq.removeEventListener("change", onChange);
   }, []);
-
-  const trackHover = (el: HTMLElement | null) => {
-    const list = listRef.current;
-    if (!el || !list) return;
-    const a = el.getBoundingClientRect();
-    const b = list.getBoundingClientRect();
-    setHoverBox({ x: a.left - b.left, w: a.width });
-  };
 
   return (
     <>
@@ -91,38 +89,7 @@ export function Nav() {
           </Link>
 
           <nav className={styles.desktop} aria-label="Primary">
-            <div
-              className={styles.menuRoot}
-              onMouseLeave={() => setHoverBox(null)}
-            >
-              <span
-                className={styles.hoverPill}
-                aria-hidden="true"
-                data-on={hoverBox ? "true" : "false"}
-                style={
-                  hoverBox
-                    ? ({
-                        "--x": `${hoverBox.x}px`,
-                        "--w": `${hoverBox.w}px`,
-                      } as CSSProperties)
-                    : undefined
-                }
-              />
-              <ul ref={listRef} className={styles.menu} role="list">
-                {NAV.map((item) => (
-                  <li key={item.href + item.label}>
-                    <Link
-                      href={item.href}
-                      className={styles.link}
-                      onMouseEnter={(e) => trackHover(e.currentTarget)}
-                      onFocus={(e) => trackHover(e.currentTarget)}
-                    >
-                      {item.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <NavMenu />
           </nav>
 
           <div className={styles.actions}>
@@ -193,15 +160,64 @@ export function Nav() {
         aria-hidden={!open}
       >
         <div className={styles.drawerInner}>
-          {NAV.map((item) => (
-            <Link
-              key={item.href + item.label}
-              href={item.href}
-              onClick={close}
+          <div className={styles.drawerGroup}>
+            <button
+              type="button"
+              className={styles.drawerAccordion}
+              aria-expanded={drawerCapsOpen}
+              aria-controls={drawerCapsMenuId}
+              onClick={() => setDrawerCapsOpen((v) => !v)}
             >
+              Capabilities
+              <svg
+                className={styles.drawerChevron}
+                width="12"
+                height="12"
+                viewBox="0 0 10 10"
+                fill="none"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2.5 3.75 5 6.25 7.5 3.75"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </button>
+            <div
+              id={drawerCapsMenuId}
+              className={styles.drawerNested}
+              data-open={drawerCapsOpen ? "true" : "false"}
+              hidden={!drawerCapsOpen}
+            >
+              {CAPABILITIES.map((cap) => (
+                <Link
+                  key={cap.slug}
+                  href={`/capabilities#${cap.slug}`}
+                  onClick={close}
+                >
+                  <span>{cap.title}</span>
+                  <span className={`mono ${styles.drawerCode}`}>{cap.index}</span>
+                </Link>
+              ))}
+              <Link
+                href="/capabilities"
+                className={styles.drawerAll}
+                onClick={close}
+              >
+                View all capabilities
+              </Link>
+            </div>
+          </div>
+
+          {DRAWER_LINKS.map((item) => (
+            <Link key={item.href + item.label} href={item.href} onClick={close}>
               {item.label}
             </Link>
           ))}
+
           <a
             className={styles.drawerCta}
             href={`mailto:${SITE.email}`}

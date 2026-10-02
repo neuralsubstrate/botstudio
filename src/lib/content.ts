@@ -27,6 +27,7 @@ export const CAPABILITIES = [
   {
     index: "01",
     eyebrow: "Foundation",
+    slug: "brand-identity",
     title: "Brand Identity",
     bullets: [
       "Visual systems that hold under product pressure",
@@ -37,6 +38,7 @@ export const CAPABILITIES = [
   {
     index: "02",
     eyebrow: "Direction",
+    slug: "strategy",
     title: "Strategy",
     bullets: [
       "Audience, offer, and narrative clarity",
@@ -47,6 +49,7 @@ export const CAPABILITIES = [
   {
     index: "03",
     eyebrow: "Craft",
+    slug: "design-innovation",
     title: "Design & Innovation",
     bullets: [
       "Interface design with motion that earns its keep",
@@ -57,6 +60,7 @@ export const CAPABILITIES = [
   {
     index: "04",
     eyebrow: "Intelligence",
+    slug: "ai-systems",
     title: "AI Systems",
     bullets: [
       "Practical AI surfaces for content and ops",
@@ -67,6 +71,7 @@ export const CAPABILITIES = [
   {
     index: "05",
     eyebrow: "Discovery",
+    slug: "seo",
     title: "SEO",
     bullets: [
       "Technical foundations search engines trust",
@@ -77,6 +82,7 @@ export const CAPABILITIES = [
   {
     index: "06",
     eyebrow: "Build",
+    slug: "development",
     title: "Development",
     bullets: [
       "Next.js / modern web stacks, production-ready",

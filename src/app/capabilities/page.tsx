@@ -23,7 +23,7 @@ export default function CapabilitiesPage() {
         <div className="shell">
           <ol className={styles.list}>
             {CAPABILITIES.map((cap) => (
-              <li key={cap.index} className={styles.item}>
+              <li key={cap.index} id={cap.slug} className={styles.item}>
                 <div className={styles.meta}>
                   <span className="kicker">{cap.eyebrow}</span>
                   <span className={styles.index}>/{cap.index}</span>
