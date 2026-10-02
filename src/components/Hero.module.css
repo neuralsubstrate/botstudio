@@ -295,12 +295,13 @@
 .lockup {
   left: calc(132 * var(--hu));
   top: calc(345 * var(--hu));
-  width: calc(901 * var(--hu));
+  width: fit-content;
+  max-width: calc(1100 * var(--hu));
   height: calc(118 * var(--hu));
   display: flex;
   align-items: center;
   margin: 0;
-  padding-left: calc(18 * var(--hu));
+  padding-inline: calc(18 * var(--hu));
   overflow: hidden;
   font: 600 calc(100 * var(--hu)) / 1 var(--display);
   letter-spacing: -0.045em;
