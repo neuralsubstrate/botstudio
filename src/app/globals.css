@@ -1,0 +1,241 @@
+@import "tailwindcss";
+@import "@fontsource/fragment-mono/400.css";
+
+:root {
+  --bg: #161719;
+  --bg-deep: #000000;
+  --ink: #ffffff;
+  --ink-dim: #797d82;
+  --ink-muted: #5c6063;
+  --silver: #d5d7de;
+  --grey-0: #fafafa;
+  --grey-1: #f2f2f2;
+  --accent: #0077e6;
+  --rule: rgba(255, 255, 255, 0.12);
+  --rule-strong: rgba(255, 255, 255, 0.28);
+  --display: var(--font-figtree), "Helvetica Neue", Arial, sans-serif;
+  --mono: "Fragment Mono", var(--font-fragment-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --scale: 0.9;
+  --u: calc(min(100vw, 1600px) / 1280 * var(--scale));
+  --gutter: calc(40 * var(--u));
+  --section-y: calc(160 * var(--u));
+  --header-gap: calc(112 * var(--u));
+  --bento-gap: calc(24 * var(--u));
+  --cta-radius: 12px;
+  --nav-h: calc(60 * var(--u));
+  --ease-out: cubic-bezier(0.2, 0.75, 0.2, 1);
+  color-scheme: dark;
+}
+
+@media (max-width: 900px) {
+  :root {
+    --u: calc(100vw / 1280 * 1.05);
+    --gutter: 20px;
+    --section-y: 96px;
+    --header-gap: 40px;
+    --nav-h: 60px;
+  }
+}
+
+@theme inline {
+  --color-accent: var(--accent);
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-ink-dim: var(--ink-dim);
+  --font-sans: var(--display);
+  --font-mono: var(--mono);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: var(--bg-deep);
+  color: var(--ink);
+}
+
+html {
+  scroll-padding-top: var(--nav-h);
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+body {
+  margin: 0;
+  font-family: var(--display);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+main {
+  padding-top: var(--nav-h);
+  flex: 1;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.shell {
+  width: min(1280px, 100%);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.mono {
+  font-family: var(--mono);
+  letter-spacing: -0.04em;
+}
+
+.kicker {
+  font-family: var(--mono);
+  font-size: calc(14 * var(--u));
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink-dim);
+  text-transform: uppercase;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
+  border-radius: var(--cta-radius);
+  font-family: var(--mono);
+  font-size: calc(16 * var(--u));
+  line-height: 1;
+  letter-spacing: -0.04em;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.25s var(--ease-out), color 0.25s var(--ease-out),
+    border-color 0.25s var(--ease-out);
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: #0066c7;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--rule-strong);
+}
+
+.btn-ghost:hover {
+  border-color: var(--ink);
+}
+
+.section {
+  padding-block: var(--section-y);
+}
+
+.section-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  gap: var(--header-gap);
+  margin-bottom: calc(80 * var(--u));
+}
+
+@media (max-width: 900px) {
+  .section-header {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(2rem, calc(56 * var(--u)), 3.5rem);
+  font-weight: 600;
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+  color: var(--ink-dim);
+}
+
+.section-lead {
+  margin: 12px 0 0;
+  font-size: calc(18 * var(--u));
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  color: var(--ink-muted);
+  max-width: 36ch;
+}
+
+.page-hero {
+  padding-block: calc(120 * var(--u)) calc(80 * var(--u));
+}
+
+.page-hero h1 {
+  margin: 16px 0 0;
+  font-size: clamp(2.5rem, calc(72 * var(--u)), 4.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+}
+
+.page-hero p {
+  margin: 24px 0 0;
+  max-width: 42ch;
+  font-size: calc(18 * var(--u));
+  line-height: 1.45;
+  color: var(--ink-dim);
+}
+
+.prose-stub {
+  max-width: 62ch;
+  color: var(--ink-dim);
+  font-size: calc(18 * var(--u));
+  line-height: 1.55;
+}
+
+.prose-stub p + p {
+  margin-top: 1em;
+}
+
+.legal-list {
+  margin: 24px 0 0;
+  padding-left: 1.2em;
+  color: var(--ink-dim);
+}
+
+.legal-list li + li {
+  margin-top: 0.5em;
+}

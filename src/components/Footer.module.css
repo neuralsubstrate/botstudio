@@ -1,0 +1,103 @@
+.footer {
+  background: var(--bg-deep);
+  border-top: 1px solid var(--rule);
+}
+
+.cta {
+  padding-block: var(--section-y);
+  border-bottom: 1px solid var(--rule);
+}
+
+.cta h2 {
+  margin: 16px 0 0;
+  font-size: clamp(2.25rem, calc(64 * var(--u)), 4rem);
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  max-width: 14ch;
+}
+
+.cta h2 span {
+  color: var(--accent);
+}
+
+.cta p {
+  margin: 20px 0 0;
+  max-width: 40ch;
+  font-size: calc(18 * var(--u));
+  line-height: 1.4;
+  color: var(--ink-dim);
+}
+
+.ctaRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: calc(32 * var(--u));
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: calc(40 * var(--u));
+  padding-block: calc(80 * var(--u));
+}
+
+.brand {
+  margin: 0;
+  font-size: calc(18 * var(--u));
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.note {
+  margin: 16px 0 0;
+  font-size: calc(13 * var(--u));
+  line-height: 1.45;
+  color: var(--ink-muted);
+  max-width: 36ch;
+}
+
+.grid ul {
+  list-style: none;
+  margin: 16px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.grid a {
+  font-size: calc(15 * var(--u));
+  color: var(--silver);
+  transition: color 0.2s var(--ease-out);
+}
+
+.grid a:hover {
+  color: var(--accent);
+}
+
+.grid li {
+  font-size: calc(15 * var(--u));
+  color: var(--ink-dim);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 24px;
+  border-top: 1px solid var(--rule);
+  font-size: calc(12 * var(--u));
+  color: var(--ink-muted);
+}
+
+.bottom p {
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

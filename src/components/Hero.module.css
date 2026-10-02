@@ -1,0 +1,67 @@
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--nav-h));
+  display: flex;
+  align-items: center;
+  background:
+    radial-gradient(ellipse 80% 50% at 70% 20%, rgba(0, 119, 230, 0.18), transparent 55%),
+    radial-gradient(ellipse 60% 40% at 10% 80%, rgba(0, 119, 230, 0.08), transparent 50%),
+    var(--bg-deep);
+  border-bottom: 1px solid var(--rule);
+}
+
+.inner {
+  width: 100%;
+  padding-block: calc(80 * var(--u)) calc(100 * var(--u));
+}
+
+.meta {
+  display: flex;
+  gap: 24px;
+  margin-bottom: calc(40 * var(--u));
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: calc(16 * var(--u));
+  letter-spacing: -0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.title {
+  margin: 12px 0 0;
+  font-size: clamp(3.5rem, calc(112 * var(--u)), 7rem);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.05em;
+}
+
+.title span {
+  color: var(--silver);
+}
+
+.lede {
+  margin: calc(32 * var(--u)) 0 0;
+  max-width: 36ch;
+  font-size: calc(21 * var(--u));
+  line-height: 1.35;
+  letter-spacing: -0.02em;
+  color: var(--ink-dim);
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: calc(40 * var(--u));
+}
+
+.coords {
+  display: flex;
+  gap: 24px;
+  margin-top: calc(80 * var(--u));
+  font-size: calc(12 * var(--u));
+  color: var(--ink-muted);
+}

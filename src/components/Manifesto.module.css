@@ -1,0 +1,23 @@
+.strip {
+  background: var(--bg);
+  border-bottom: 1px solid var(--rule);
+  padding-block: calc(100 * var(--u));
+}
+
+.inner {
+  display: grid;
+  gap: calc(8 * var(--u));
+}
+
+.inner p {
+  margin: 0;
+  font-size: clamp(2rem, calc(72 * var(--u)), 4.5rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--ink);
+}
+
+.accent {
+  color: var(--accent) !important;
+}
